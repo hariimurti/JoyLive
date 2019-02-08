@@ -6,8 +6,9 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
-import net.harimurti.joylive.JsonData.JoyLive;
-import net.harimurti.joylive.JsonData.User;
+import net.harimurti.joylive.Classes.Notification;
+import net.harimurti.joylive.JsonData.JoyJson;
+import net.harimurti.joylive.JsonData.JoyUser;
 
 import java.io.IOException;
 
@@ -55,7 +56,7 @@ public class JoyLiveApi {
                 .addHeader("Accept","application/json")
                 .addHeader("Origin","http://m.joylive.tv")
                 .addHeader("X-Requested-With","XMLHttpRequest")
-                .addHeader("User-Agent","Mozilla/5.0 (Linux; Android 8.0.0; Pixel) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.80 Mobile Safari/537.36")
+                .addHeader("JoyUser-Agent","Mozilla/5.0 (Linux; Android 8.0.0; Pixel) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.80 Mobile Safari/537.36")
                 .addHeader("Content-Type","application/x-www-form-urlencoded")
                 .addHeader("Referer","http://m.joylive.tv/")
                 .addHeader("Accept-Encoding","gzip, deflate")
@@ -83,16 +84,17 @@ public class JoyLiveApi {
                     }
 
                     Gson gson = new Gson();
-                    JoyLive joyObject = gson.fromJson(responseBody.string(), JoyLive.class);
-                    User[] users = joyObject.getData().getRooms();
+                    JoyJson joyObject = gson.fromJson(responseBody.string(), JoyJson.class);
+                    JoyUser[] users = joyObject.getData().getRooms();
 
                     int count = 0;
-                    for (User user: users) {
+                    for (JoyUser user: users) {
                         if (!user.getSex().equals("2")) continue;
 
+                        Log.e("JSON", "RID : " + user.getRid());
+
                         count++;
-                        UserInfo userInfo = new UserInfo(user.getHeadPic(), user.getNickname(), user.getAnnouncement(), user.getVideoPlayUrl(), user.getOnlineNum());
-                        MainActivity.AddUser(userInfo);
+                        MainActivity.AddUser(user);
                     }
 
                     Log.d(TAG, "Found " + Integer.toString(count) + " new girls");

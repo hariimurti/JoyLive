@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -28,12 +27,15 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import net.harimurti.joylive.Classes.Notification;
+import net.harimurti.joylive.JsonData.JoyUser;
+
 public class PlayerActivity extends AppCompatActivity {
     private SimpleExoPlayer player;
     private RelativeLayout layoutMenu;
     private ImageButton favorite;
     private boolean isFavorite;
-    private UserInfo userInfo;
+    private JoyUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public class PlayerActivity extends AppCompatActivity {
         String nickname = bundle.getString("nickname");
         String rtmp = bundle.getString("rtmp");
 
-        userInfo = new UserInfo(image, nickname, "", rtmp);
+        user = new JoyUser("", nickname, image, rtmp);
 
         TextView tvNickname = findViewById(R.id.tv_nickname);
         tvNickname.setText(nickname);
@@ -132,8 +134,8 @@ public class PlayerActivity extends AppCompatActivity {
     public void buttonShareClick(View v) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "JoyLive.tv Streaming");
-        intent.putExtra(Intent.EXTRA_TEXT, userInfo.getNickname() + " sedang live disini:\n" + userInfo.getLinkShare());
+        intent.putExtra(Intent.EXTRA_SUBJECT, "JoyJson.tv Streaming");
+        intent.putExtra(Intent.EXTRA_TEXT, user.getNickname() + " sedang live disini:\n" + user.getLinkPlaylist());
         startActivity(Intent.createChooser(intent, "Share URL"));
     }
 

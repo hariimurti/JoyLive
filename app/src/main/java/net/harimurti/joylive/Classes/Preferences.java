@@ -1,4 +1,4 @@
-package net.harimurti.joylive;
+package net.harimurti.joylive.Classes;
 
 import android.content.Context;
 import android.content.SharedPreferences;

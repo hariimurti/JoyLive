@@ -11,11 +11,15 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import net.harimurti.joylive.Classes.Notification;
+import net.harimurti.joylive.Classes.Plugins;
+import net.harimurti.joylive.JsonData.JoyUser;
+
 import java.util.ArrayList;
 
-public class ListAdapter extends ArrayAdapter<UserInfo> {
+public class ListAdapter extends ArrayAdapter<JoyUser> {
     private Context context;
-    private ArrayList<UserInfo> dataSet;
+    private ArrayList<JoyUser> dataSet;
 
     private static class ViewHolder {
         ImageView image;
@@ -26,7 +30,7 @@ public class ListAdapter extends ArrayAdapter<UserInfo> {
         ImageButton menu;
     }
 
-    public ListAdapter(Context context, ArrayList<UserInfo> dataSet) {
+    public ListAdapter(Context context, ArrayList<JoyUser> dataSet) {
         super(context, R.layout.content, dataSet);
         this.context = context;
         this.dataSet = dataSet;
@@ -34,7 +38,7 @@ public class ListAdapter extends ArrayAdapter<UserInfo> {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final UserInfo content = getItem(position);
+        final JoyUser content = getItem(position);
         ViewHolder viewHolder;
 
         if (convertView == null) {
@@ -52,34 +56,24 @@ public class ListAdapter extends ArrayAdapter<UserInfo> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Picasso.get().load(content.getImage()).error(R.drawable.ic_no_image).into(viewHolder.image);
+        Picasso.get().load(content.getProfilePic()).error(R.drawable.ic_no_image).into(viewHolder.image);
         viewHolder.nickname.setText(content.getNickname());
-        viewHolder.status.setText(content.getStatus());
+        viewHolder.status.setText(content.getAnnouncement());
         viewHolder.viewer.setText(content.getViewer());
         viewHolder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Notification.Toast("Open Stream : " + content.getNickname());
-                MainActivity.OpenPlayer(content);
+                Plugins.OpenPlayer(content);
             }
         });
         viewHolder.menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Notification.Toast("Share : " + content.getLinkShare());
+                Notification.Toast("Menu : " + content.getNickname());
             }
         });
 
         return convertView;
     }
-
-//    private Drawable getDrawable(int id) {
-//        return ContextCompat.getDrawable(getContext(), id);
-//    }
-
-//    public void setContentList(ArrayList<UserInfo> dataSet) {
-//        this.dataSet.clear();
-//        this.dataSet.addAll(dataSet);
-//        notifyDataSetChanged();
-//    }
 }

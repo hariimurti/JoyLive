@@ -1,9 +1,11 @@
-package net.harimurti.joylive;
+package net.harimurti.joylive.Classes;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
+
+import net.harimurti.joylive.MainActivity;
 
 public class Notification {
 

@@ -19,12 +19,16 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import net.harimurti.joylive.Classes.Notification;
+import net.harimurti.joylive.Classes.Preferences;
+import net.harimurti.joylive.JsonData.JoyUser;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout swipeRefresh;
-    private static ArrayList<UserInfo> listUser = new ArrayList<>();
+    private static ArrayList<JoyUser> listUser = new ArrayList<>();
     private static ListAdapter listAdapter;
     private static Context context;
     private static Preferences pref;
@@ -127,36 +131,8 @@ public class MainActivity extends AppCompatActivity {
         return context;
     }
 
-    public static void AddUser(UserInfo user) {
+    public static void AddUser(JoyUser user) {
         listUser.add(user);
-    }
-
-    public static void OpenPlayer(UserInfo user) {
-        try {
-            if (pref.getBoolean(Preferences.KEY_3RD_PLAYER)) {
-                Uri uriStream = Uri.parse(user.getLinkStream());
-                Intent intent = new Intent(Intent.ACTION_VIEW, uriStream);
-                context.startActivity(intent);
-                return;
-            }
-        }
-        catch (Exception e) {
-            Notification.Toast("3rd Player Error. Use build-in instead!");
-        }
-        
-        Intent intent = new Intent(context, PlayerActivity.class);
-        intent.putExtra("image", user.getImage());
-        intent.putExtra("nickname", user.getNickname());
-        intent.putExtra("rtmp", user.getLinkStream());
-        context.startActivity(intent);
-    }
-
-    public static void ShareLink(String text) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "JoyLive.tv Streaming");
-        intent.putExtra(Intent.EXTRA_TEXT, text);
-        context.startActivity(Intent.createChooser(intent, "Share URL"));
     }
 
     private final BroadcastReceiver RefreshReceiver = new BroadcastReceiver() {
