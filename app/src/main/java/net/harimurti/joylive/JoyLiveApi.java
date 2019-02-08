@@ -22,15 +22,14 @@ import okhttp3.ResponseBody;
 
 public class JoyLiveApi {
     private static final String TAG = "API";
-    private static Context context;
-    private static int currentpage = 0;
+    private static int currentPage = 0;
     private static boolean working = false;
 
     public static void GetMoreUsers() {
         if (working) return;
 
-        currentpage++;
-        GetUsers(currentpage);
+        currentPage++;
+        GetUsers(currentPage);
     }
 
     public static void GetUsers(int page) {
@@ -38,16 +37,15 @@ public class JoyLiveApi {
         if (page == 0) page = 1;
 
         working = true;
-        context = MainActivity.getContext();
-        currentpage = page;
+        currentPage = page;
 
-        String spage = Integer.toString(page);
-        Log.d("API", "Loading page = " + spage);
-        Notification.Toast("Loading page " + spage + " ...");
+        String sPage = Integer.toString(page);
+        Log.d("API", "Loading page = " + sPage);
+        Notification.Toast("Loading page " + sPage + " ...");
 
         OkHttpClient client = new OkHttpClient();
         RequestBody body = new FormBody.Builder()
-                .add("page", spage)
+                .add("page", sPage)
                 .build();
         Request request = new Request.Builder()
                 .url("http://m.joylive.tv/index/getRoomInfo")
