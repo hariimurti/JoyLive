@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -67,32 +68,34 @@ public class PlayerActivity extends AppCompatActivity {
         MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(Uri.parse(rtmp));
 
-        player.prepare(videoSource);
-        player.setPlayWhenReady(true);
+        Player.EventListener eventListener = new Player.EventListener() {
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+                String errorMessage = "Something went wrong! Try again later.";
 
-//        player.addListener(new ExoPlayer.EventListener() {
-//            @Override
-//            public void onPlayerError(ExoPlaybackException error) {
-//                switch (error.type) {
-//                    case ExoPlaybackException.TYPE_SOURCE:
-//                        Log.e("Player", "TYPE_SOURCE: " + error.getSourceException().getMessage());
-//                        break;
-//
-//                    case ExoPlaybackException.TYPE_RENDERER:
-//                        Log.e("Player", "TYPE_RENDERER: " + error.getRendererException().getMessage());
-//                        break;
-//
-//                    case ExoPlaybackException.TYPE_UNEXPECTED:
-//                        Log.e("Player", "TYPE_UNEXPECTED: " + error.getUnexpectedException().getMessage());
-//                        break;
-//                }
-//            }
-//
-//            @Override
-//            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-//                Log.d("Player", "playWhenReady : " + playWhenReady);
-//            }
-//        });
+                switch (error.type) {
+                    case ExoPlaybackException.TYPE_SOURCE:
+                        errorMessage = error.getSourceException().getMessage();
+                        Log.e("Player", "TYPE_SOURCE: " + errorMessage);
+                        break;
+
+                    case ExoPlaybackException.TYPE_RENDERER:
+                        errorMessage = error.getRendererException().getMessage();
+                        Log.e("Player", "TYPE_RENDERER: " + errorMessage);
+                        break;
+
+                    case ExoPlaybackException.TYPE_UNEXPECTED:
+                        errorMessage = error.getUnexpectedException().getMessage();
+                        Log.e("Player", "TYPE_UNEXPECTED: " + errorMessage);
+                        break;
+                }
+
+                Notification.Toast(errorMessage);
+            }
+        };
+
+        player.addListener(eventListener);
+        player.prepare(videoSource);
     }
 
     @Override
