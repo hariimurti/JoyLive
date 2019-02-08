@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlayerActivity">
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/pv_player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/cardview_dark_background"
+        android:keepScreenOn="true"
+        app:use_controller="false">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/layoutmenu"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/player_fav_icon"
+                android:layout_margin="15dp">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="@dimen/player_width_nickname"
+                    android:layout_height="match_parent"
+                    app:cardBackgroundColor="@color/cardview_dark_background"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="5dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp">
+
+                        <ImageButton
+                            android:id="@+id/ib_share"
+                            android:layout_width="@dimen/player_share_icon"
+                            android:layout_height="@dimen/player_share_icon"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerInParent="false"
+                            android:layout_centerVertical="true"
+                            android:background="@null"
+                            android:onClick="buttonShareClick"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_action_share_light" />
+
+                        <TextView
+                            android:id="@+id/tv_nickname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_centerVertical="true"
+                            android:layout_toStartOf="@+id/ib_share"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:textColor="@color/cardview_light_background" />
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <ImageButton
+                    android:id="@+id/ib_favorite"
+                    android:layout_width="@dimen/player_fav_icon"
+                    android:layout_height="@dimen/player_fav_icon"
+                    android:layout_alignParentEnd="true"
+                    android:background="@null"
+                    android:onClick="buttonFavoriteClick"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_action_unfavorite" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/layoutmenu"
+                android:onClick="onLayoutMenu"
+                android:background="@null"/>
+
+        </RelativeLayout>
+
+    </com.google.android.exoplayer2.ui.PlayerView>
+
+</android.support.constraint.ConstraintLayout>
