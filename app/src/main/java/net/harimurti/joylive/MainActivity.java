@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private boolean doubleBackToExitPressedOnce;
     private SwipeRefreshLayout swipeRefresh;
     private static ArrayList<JoyUser> listUser = new ArrayList<>();
     private static ListAdapter listAdapter;
@@ -112,8 +115,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_about:
-                Toast.makeText(this, "Refresh selected", Toast.LENGTH_SHORT)
-                        .show();
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                dialog.setMessage("Haii, Haloooooo\n\n" +
+                        "Aplikasi ini aku tujukan kepada om-om yg suka nonton joylive!\n\n" +
+                        "Selamat menikmati \uD83D\uDE18")
+                        .setTitle(R.string.app_name)
+                        .create();
+                dialog.show();
                 break;
 
             case R.id.action_exit:
@@ -127,12 +135,33 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        if (!this.doubleBackToExitPressedOnce)
+            Notification.Toast("Aduh, kok udahan si om??\nPencet sekali lagi dong ahh..");
+
+        this.doubleBackToExitPressedOnce = true;
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
+    }
+
     public static Context getContext() {
         return context;
     }
 
     public static void AddUser(JoyUser user) {
-        listUser.add(user);
+        if (!listUser.contains(user))
+            listUser.add(user);
     }
 
     private final BroadcastReceiver RefreshReceiver = new BroadcastReceiver() {
