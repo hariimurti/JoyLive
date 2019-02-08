@@ -1,6 +1,5 @@
 package net.harimurti.joylive;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -70,7 +69,7 @@ public class JoyLiveApi {
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
                 Log.e(TAG, "Request Failure", e);
-                //Notification.Toast("Something went wrong! Try again later.");
+                Notification.Toast("Something went wrong! Try again later.");
 
                 working = false;
             }
@@ -98,16 +97,16 @@ public class JoyLiveApi {
                         MainActivity.AddUser(userInfo);
                     }
 
-                    Log.d(TAG, "Found " + Integer.toString(count) + " new users");
+                    Log.d(TAG, "Found " + Integer.toString(count) + " new girls");
 
                     LocalBroadcastManager.getInstance(MainActivity.getContext())
                             .sendBroadcast(new Intent("RefreshAdapter"));
 
-                    //Notification.Toast("Found " + Integer.toString(count) + " new users");
+                    Notification.Toast("Found " + Integer.toString(count) + " new girls");
                 }
                 catch (IOException e) {
                     Log.e(TAG, "Response Error", e);
-                    //Notification.Toast("Something went wrong! Try again later.");
+                    Notification.Toast("Something went wrong! Try again later.");
                 }
 
                 working = false;
