@@ -16,14 +16,8 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
@@ -43,24 +37,21 @@ public class PlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player);
 
         Bundle bundle = getIntent().getExtras();
-        String image = bundle.getString("image");
-        String nickname = bundle.getString("nickname");
-        String rtmp = bundle.getString("rtmp");
+        String id = bundle.getString(JoyUser.MID);
+        String profilePic = bundle.getString(JoyUser.PROFILEPIC);
+        String nickname = bundle.getString(JoyUser.NICKNAME);
+        String linkStream = bundle.getString(JoyUser.LINKSTREAM);
 
-        user = new JoyUser("", nickname, image, rtmp);
-
-        TextView tvNickname = findViewById(R.id.tv_nickname);
-        tvNickname.setText(nickname);
+        user = new JoyUser(id, nickname, profilePic, linkStream);
 
         layoutMenu = findViewById(R.id.layoutmenu);
         favorite = findViewById(R.id.ib_favorite);
+        TextView tvNickname = findViewById(R.id.tv_nickname);
+        tvNickname.setText(nickname);
 
         Notification.Toast("Opening Stream : " + nickname);
 
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-        player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
+        player = ExoPlayerFactory.newSimpleInstance(this);
 
         PlayerView playerView = findViewById(R.id.pv_player);
         playerView.setPlayer(player);
@@ -68,7 +59,7 @@ public class PlayerActivity extends AppCompatActivity {
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
                 Util.getUserAgent(this, "ExoPlayer2"));
         MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(Uri.parse(rtmp));
+                .createMediaSource(Uri.parse(linkStream));
 
         Player.EventListener eventListener = new Player.EventListener() {
             @Override

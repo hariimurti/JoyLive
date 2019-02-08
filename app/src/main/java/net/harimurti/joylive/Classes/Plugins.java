@@ -27,9 +27,10 @@ public class Plugins {
         }
 
         Intent intent = new Intent(context, PlayerActivity.class);
-        intent.putExtra("image", user.getProfilePic());
-        intent.putExtra("nickname", user.getNickname());
-        intent.putExtra("rtmp", user.getLinkStream());
+        intent.putExtra(JoyUser.MID, user.getMid());
+        intent.putExtra(JoyUser.NICKNAME, user.getNickname());
+        intent.putExtra(JoyUser.PROFILEPIC, user.getProfilePic());
+        intent.putExtra(JoyUser.LINKSTREAM, user.getLinkStream());
         context.startActivity(intent);
     }
 

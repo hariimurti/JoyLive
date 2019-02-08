@@ -3,6 +3,12 @@ package net.harimurti.joylive.JsonData;
 import net.harimurti.joylive.Classes.Converter;
 
 public class JoyUser {
+    public static final String RID = "rid";
+    public static final String MID = "mid";
+    public static final String NICKNAME = "nickname";
+    public static final String PROFILEPIC = "headPic";
+    public static final String LINKSTREAM = "videoPlayUrl";
+
     private String rid;
     private long playStartTime;
     private String sex;
@@ -15,11 +21,11 @@ public class JoyUser {
     private String moderatorLevel;
     private String videoPlayUrl;
 
-    public JoyUser(String mid, String nickname, String headPic, String videoPlayUrl) {
-        this.mid = mid;
+    public JoyUser(String id, String nickname, String profilePic, String linkStream) {
+        this.mid = id;
         this.nickname = nickname;
-        this.headPic = headPic;
-        this.videoPlayUrl = videoPlayUrl;
+        this.headPic = profilePic;
+        this.videoPlayUrl = linkStream;
     }
 
     public String getRid() {
