@@ -21,9 +21,9 @@ public class ListAdapter extends ArrayAdapter<UserInfo> {
         ImageView image;
         TextView nickname;
         TextView status;
+        TextView viewer;
         ImageButton play;
-//        ImageButton share;
-//        ImageButton favorite;
+        ImageButton menu;
     }
 
     public ListAdapter(Context context, ArrayList<UserInfo> dataSet) {
@@ -44,9 +44,9 @@ public class ListAdapter extends ArrayAdapter<UserInfo> {
             viewHolder.image = convertView.findViewById(R.id.iv_picture);
             viewHolder.nickname = convertView.findViewById(R.id.tv_nickname);
             viewHolder.status = convertView.findViewById(R.id.tv_status);
+            viewHolder.viewer = convertView.findViewById(R.id.tv_viewer);
             viewHolder.play = convertView.findViewById(R.id.ib_play);
-//            viewHolder.share = convertView.findViewById(R.id.ib_share);
-//            viewHolder.favorite = convertView.findViewById(R.id.ib_favorite);
+            viewHolder.menu = convertView.findViewById(R.id.ib_menu);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -55,6 +55,7 @@ public class ListAdapter extends ArrayAdapter<UserInfo> {
         Picasso.get().load(content.getImage()).error(R.drawable.ic_no_image).into(viewHolder.image);
         viewHolder.nickname.setText(content.getNickname());
         viewHolder.status.setText(content.getStatus());
+        viewHolder.viewer.setText(content.getViewer());
         viewHolder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,19 +63,12 @@ public class ListAdapter extends ArrayAdapter<UserInfo> {
                 MainActivity.OpenPlayer(content);
             }
         });
-//        viewHolder.share.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //Notification.Toast("Share : " + content.getLinkShare());
-//                MainActivity.ShareLink("Ayo tonton " + content.getNickname() + " disini:\n"+ content.getLinkShare());
-//            }
-//        });
-//        viewHolder.favorite.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Notification.Toast("Favorit : " + content.getNickname());
-//            }
-//        });
+        viewHolder.menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Notification.Toast("Share : " + content.getLinkShare());
+            }
+        });
 
         return convertView;
     }

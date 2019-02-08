@@ -94,7 +94,7 @@ public class JoyLiveApi {
                         if (!user.getSex().equals("2")) continue;
 
                         count++;
-                        UserInfo userInfo = new UserInfo(user.getHeadPic(), user.getNickname(), user.getAnnouncement(), user.getVideoPlayUrl());
+                        UserInfo userInfo = new UserInfo(user.getHeadPic(), user.getNickname(), user.getAnnouncement(), user.getVideoPlayUrl(), user.getOnlineNum());
                         MainActivity.AddUser(userInfo);
                     }
 

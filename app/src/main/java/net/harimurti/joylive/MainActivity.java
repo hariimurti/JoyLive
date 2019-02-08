@@ -4,8 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,10 +23,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SwipeRefreshLayout swiperefresh;
+    private SwipeRefreshLayout swipeRefresh;
     private static ArrayList<UserInfo> listUser = new ArrayList<>();
     private static ListAdapter listAdapter;
     private static Context context;
+    private static Preferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle(R.string.app_title);
         context = this;
+
+        pref = new Preferences(this);
 
         listAdapter = new ListAdapter(this, listUser);
         final ListView listView = findViewById(R.id.content);
@@ -58,12 +61,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        swiperefresh = findViewById(R.id.swiperefresh);
-        swiperefresh.setColorSchemeResources(android.R.color.holo_blue_bright,
+        swipeRefresh = findViewById(R.id.swiperefresh);
+        swipeRefresh.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-        swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 listUser.clear();
@@ -85,14 +88,16 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.mainmenu, menu);
 
         MenuItem item = menu.findItem(R.id.action_switch);
-        View view = MenuItemCompat.getActionView(item);
-        Switch switcha = view.findViewById(R.id.sw_player);
-        switcha.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        View view = item.getActionView();
 
+        Switch switcha = view.findViewById(R.id.sw_player);
+        switcha.setChecked(pref.getBoolean(Preferences.KEY_3RD_PLAYER));
+        switcha.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 boolean swb = switcha.isChecked();
-                Notification.Toast("Player : " + (swb ? "external" : "embed"));
+                pref.setBoolean(Preferences.KEY_3RD_PLAYER, swb);
+                Notification.Toast(swb ? "menggunakan player eksternal" : "menggunakan player internal");
             }
         });
 
@@ -127,11 +132,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void OpenPlayer(UserInfo user) {
-        Intent intent = new Intent(context, PlayerActivity.class);
-        intent.putExtra("image", user.getImage());
-        intent.putExtra("nickname", user.getNickname());
-        intent.putExtra("rtmp", user.getLinkStream());
-        context.startActivity(intent);
+        if (pref.getBoolean(Preferences.KEY_3RD_PLAYER)) {
+            Uri uriStream = Uri.parse(user.getLinkStream());
+            Intent intent = new Intent(Intent.ACTION_VIEW, uriStream);
+            context.startActivity(intent);
+        }
+        else {
+            Intent intent = new Intent(context, PlayerActivity.class);
+            intent.putExtra("image", user.getImage());
+            intent.putExtra("nickname", user.getNickname());
+            intent.putExtra("rtmp", user.getLinkStream());
+            context.startActivity(intent);
+        }
     }
 
     public static void ShareLink(String text) {
@@ -146,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             listAdapter.notifyDataSetChanged();
-            swiperefresh.setRefreshing(false);
+            swipeRefresh.setRefreshing(false);
         }
     };
 }

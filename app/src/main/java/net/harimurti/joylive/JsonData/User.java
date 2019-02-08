@@ -7,14 +7,16 @@ public class User {
     String headPic;
     String announcement;
     String videoPlayUrl;
+    int onlineNum;
 
-    public User(String mid, String nickname, String sex, String headPic, String announcement, String videoPlayUrl) {
+    public User(String mid, String nickname, String sex, String headPic, String announcement, String videoPlayUrl, int onlineNum) {
         this.mid = mid;
         this.nickname = nickname;
         this.sex = sex;
         this.headPic = headPic;
         this.announcement = announcement;
         this.videoPlayUrl = videoPlayUrl;
+        this.onlineNum = onlineNum;
     }
 
     public String getMid() {
@@ -39,5 +41,9 @@ public class User {
 
     public String getVideoPlayUrl() {
         return this.videoPlayUrl;
+    }
+
+    public int getOnlineNum() {
+        return this.onlineNum;
     }
 }

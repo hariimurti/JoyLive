@@ -10,19 +10,30 @@ public class UserInfo {
     private String Status;
     private String Link;
     private boolean Favorite;
+    private int Viewer;
 
     public UserInfo(String Image, String Nickname, String Status, String Link) {
         this.Image = Image;
         this.Nickname = Nickname;
         this.Status = Status;
         this.Link = Link.replace("\\/", "/");
+        this.Viewer = 0;
     }
 
-    public UserInfo(String Image, String Nickname, String Status, String Link, boolean Favorite) {
+    public UserInfo(String Image, String Nickname, String Status, String Link, int Viewer) {
         this.Image = Image;
         this.Nickname = Nickname;
         this.Status = Status;
         this.Link = Link.replace("\\/", "/");
+        this.Viewer = Viewer;
+    }
+
+    public UserInfo(String Image, String Nickname, String Status, String Link, int Viewer, boolean Favorite) {
+        this.Image = Image;
+        this.Nickname = Nickname;
+        this.Status = Status;
+        this.Link = Link.replace("\\/", "/");
+        this.Viewer = Viewer;
         this.Favorite = Favorite;
     }
 
@@ -65,5 +76,9 @@ public class UserInfo {
 
     public boolean isFavorite() {
         return this.Favorite;
+    }
+
+    public String getViewer() {
+        return Integer.toString(this.Viewer);
     }
 }
