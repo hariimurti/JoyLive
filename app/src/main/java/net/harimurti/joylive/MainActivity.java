@@ -132,18 +132,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void OpenPlayer(UserInfo user) {
-        if (pref.getBoolean(Preferences.KEY_3RD_PLAYER)) {
-            Uri uriStream = Uri.parse(user.getLinkStream());
-            Intent intent = new Intent(Intent.ACTION_VIEW, uriStream);
-            context.startActivity(intent);
+        try {
+            if (pref.getBoolean(Preferences.KEY_3RD_PLAYER)) {
+                Uri uriStream = Uri.parse(user.getLinkStream());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uriStream);
+                context.startActivity(intent);
+                return;
+            }
         }
-        else {
-            Intent intent = new Intent(context, PlayerActivity.class);
-            intent.putExtra("image", user.getImage());
-            intent.putExtra("nickname", user.getNickname());
-            intent.putExtra("rtmp", user.getLinkStream());
-            context.startActivity(intent);
+        catch (Exception e) {
+            Notification.Toast("3rd Player Error. Use build-in instead!");
         }
+        
+        Intent intent = new Intent(context, PlayerActivity.class);
+        intent.putExtra("image", user.getImage());
+        intent.putExtra("nickname", user.getNickname());
+        intent.putExtra("rtmp", user.getLinkStream());
+        context.startActivity(intent);
     }
 
     public static void ShareLink(String text) {
