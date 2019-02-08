@@ -79,6 +79,11 @@ public class UserInfo {
     }
 
     public String getViewer() {
-        return Integer.toString(this.Viewer);
+        if (this.Viewer < 1000)
+            return Integer.toString(this.Viewer);
+
+        int exp = (int) (Math.log(this.Viewer) / Math.log(1000));
+        String pre = ("KMGTPE").charAt(exp-1) + "";
+        return String.format("%.1f%s", this.Viewer / Math.pow(1000, exp), pre);
     }
 }
