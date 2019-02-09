@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -19,8 +18,8 @@ import android.widget.AbsListView;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
-import android.widget.Toast;
 
+import net.harimurti.joylive.Api.JoyLive;
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Classes.Preferences;
 import net.harimurti.joylive.Api.JoyUser;
@@ -31,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce;
     private SwipeRefreshLayout swipeRefresh;
+    private static ArrayList<JoyUser> listFavAndUser = new ArrayList<>();
     private static ArrayList<JoyUser> listUser = new ArrayList<>();
+    private static ArrayList<JoyUser> listFavorite = new ArrayList<>();
     private static ListAdapter listAdapter;
     private static Context context;
     private static Preferences pref;
@@ -43,9 +44,10 @@ public class MainActivity extends AppCompatActivity {
         setTitle(R.string.app_title);
         context = this;
 
-        pref = new Preferences(this);
+        pref = new Preferences();
+        listFavorite.addAll(pref.getFavorite());
 
-        listAdapter = new ListAdapter(this, listUser);
+        listAdapter = new ListAdapter(this, listFavAndUser);
         final ListView listView = findViewById(R.id.content);
         listView.setAdapter(listAdapter);
         listView.setEmptyView(findViewById(R.id.empty));
@@ -104,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 boolean swb = switcha.isChecked();
                 pref.setBoolean(Preferences.KEY_3RD_PLAYER, swb);
-                Notification.Toast(swb ? "menggunakan player eksternal" : "menggunakan player internal");
             }
         });
 
@@ -162,6 +163,23 @@ public class MainActivity extends AppCompatActivity {
     public static void AddUser(JoyUser user) {
         if (!listUser.contains(user))
             listUser.add(user);
+
+        if (!listFavAndUser.contains(user))
+            listFavAndUser.add(user);
+    }
+
+    public static void AddFavUser(JoyUser user) {
+        if (!pref.addFavorite(user))
+            return;
+
+        listFavorite.add(user);
+        listUser.remove(user);
+
+        listFavAndUser.clear();
+        listFavAndUser.addAll(listFavorite);
+        listFavAndUser.addAll(listUser);
+
+        listAdapter.notifyDataSetChanged();
     }
 
     private final BroadcastReceiver RefreshReceiver = new BroadcastReceiver() {
