@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     def versionPropsFile = file('version.prop')
     Properties versionProps = new Properties()
-    if(versionPropsFile.exists())
+    if (versionPropsFile.exists())
         versionProps.load(new FileInputStream(versionPropsFile))
 
     def _versionCode = (versionProps['VERSION_CODE'] ?: "1").toInteger()
@@ -12,12 +12,15 @@ android {
     def _patch = (versionProps['PATCH'] ?: "0").toInteger() + 1
 
     List<String> runTasks = gradle.startParameter.getTaskNames()
-    for (String item : runTasks)
+    for (String item : runTasks) {
         if (item.contains("assembleRelease")) {
             _versionCode = _versionCode + 1
+        }
+        if (item.contains("clean")) {
             _minor = _minor + 1
             _patch = 0
         }
+    }
 
     if(_minor == 10){
         _minor = 0
