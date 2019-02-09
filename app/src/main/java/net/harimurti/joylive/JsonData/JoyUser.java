@@ -7,6 +7,7 @@ public class JoyUser {
     public static final String MID = "mid";
     public static final String NICKNAME = "nickname";
     public static final String PROFILEPIC = "headPic";
+    public static final String ANNOUNCEMENT = "announcement";
     public static final String LINKSTREAM = "videoPlayUrl";
 
     private String rid;
@@ -21,10 +22,11 @@ public class JoyUser {
     private String moderatorLevel;
     private String videoPlayUrl;
 
-    public JoyUser(String id, String nickname, String profilePic, String linkStream) {
+    public JoyUser(String id, String nickname, String profilePic, String announcement, String linkStream) {
         this.mid = id;
         this.nickname = nickname;
         this.headPic = profilePic;
+        this.announcement = announcement;
         this.videoPlayUrl = linkStream;
     }
 

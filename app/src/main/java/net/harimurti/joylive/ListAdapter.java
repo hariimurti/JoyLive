@@ -11,8 +11,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import net.harimurti.joylive.Classes.Notification;
-import net.harimurti.joylive.Classes.Plugins;
+import net.harimurti.joylive.Classes.Link;
 import net.harimurti.joylive.JsonData.JoyUser;
 
 import java.util.ArrayList;
@@ -63,14 +62,13 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
         viewHolder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Notification.Toast("Open Stream : " + content.getNickname());
-                Plugins.OpenPlayer(content);
+                Link.OpenPlayer(content);
             }
         });
         viewHolder.menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Notification.Toast("Menu : " + content.getNickname());
+                MainActivity.AddFavUser(content);
             }
         });
 

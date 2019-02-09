@@ -8,11 +8,11 @@ import net.harimurti.joylive.JsonData.JoyUser;
 import net.harimurti.joylive.MainActivity;
 import net.harimurti.joylive.PlayerActivity;
 
-public class Plugins {
+public class Link {
 
     public static void OpenPlayer(JoyUser user) {
         Context context = MainActivity.getContext();
-        Preferences pref = new Preferences(context);
+        Preferences pref = new Preferences();
 
         try {
             if (pref.getBoolean(Preferences.KEY_3RD_PLAYER)) {
@@ -30,14 +30,15 @@ public class Plugins {
         intent.putExtra(JoyUser.MID, user.getMid());
         intent.putExtra(JoyUser.NICKNAME, user.getNickname());
         intent.putExtra(JoyUser.PROFILEPIC, user.getProfilePic());
+        intent.putExtra(JoyUser.ANNOUNCEMENT, user.getAnnouncement());
         intent.putExtra(JoyUser.LINKSTREAM, user.getLinkStream());
         context.startActivity(intent);
     }
 
-    public static void ShareLink(String text) {
+    public static void Share(String text) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "JoyJson.tv Streaming");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "JoyLive.tv Streaming");
         intent.putExtra(Intent.EXTRA_TEXT, text);
         MainActivity.getContext().startActivity(Intent.createChooser(intent, "Share URL"));
     }

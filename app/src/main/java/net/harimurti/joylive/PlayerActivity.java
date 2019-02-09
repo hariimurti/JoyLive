@@ -1,6 +1,5 @@
 package net.harimurti.joylive;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,8 +20,11 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import net.harimurti.joylive.Classes.Link;
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.JsonData.JoyUser;
+
+import java.util.Locale;
 
 public class PlayerActivity extends AppCompatActivity {
     private SimpleExoPlayer player;
@@ -40,9 +42,10 @@ public class PlayerActivity extends AppCompatActivity {
         String id = bundle.getString(JoyUser.MID);
         String profilePic = bundle.getString(JoyUser.PROFILEPIC);
         String nickname = bundle.getString(JoyUser.NICKNAME);
+        String announcement = bundle.getString(JoyUser.ANNOUNCEMENT);
         String linkStream = bundle.getString(JoyUser.LINKSTREAM);
 
-        user = new JoyUser(id, nickname, profilePic, linkStream);
+        user = new JoyUser(id, nickname, profilePic, announcement, linkStream);
 
         layoutMenu = findViewById(R.id.layoutmenu);
         favorite = findViewById(R.id.ib_favorite);
@@ -112,10 +115,10 @@ public class PlayerActivity extends AppCompatActivity {
 
     public void buttonFavoriteClick(View v) {
         if (isFavorite) {
-            Notification.Toast("Ra Favorit!");
+            Notification.Toast(user.getNickname() + " — unFavorite!");
             favorite.setImageResource(R.drawable.ic_action_unfavorite);
         } else {
-            Notification.Toast("Favorit!");
+            Notification.Toast(user.getNickname() + " — Favorite!");
             favorite.setImageResource(R.drawable.ic_action_favorite);
         }
 
@@ -123,11 +126,10 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     public void buttonShareClick(View v) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "JoyJson.tv Streaming");
-        intent.putExtra(Intent.EXTRA_TEXT, user.getNickname() + " sedang live disini:\n" + user.getLinkPlaylist());
-        startActivity(Intent.createChooser(intent, "Share URL"));
+        String text = String.format(Locale.getDefault(),
+                "%s — %s\n▶LiveShow : %s",
+                user.getNickname(), user.getAnnouncement(), user.getLinkPlaylist());
+        Link.Share(text);
     }
 
     public void onLayoutMenu(View v) {
