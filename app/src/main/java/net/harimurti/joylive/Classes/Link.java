@@ -27,7 +27,7 @@ public class Link {
         }
 
         Intent intent = new Intent(context, PlayerActivity.class);
-        intent.putExtra(JoyUser.MID, user.getMid());
+        intent.putExtra(JoyUser.ID, user.getId());
         intent.putExtra(JoyUser.NICKNAME, user.getNickname());
         intent.putExtra(JoyUser.PROFILEPIC, user.getProfilePic());
         intent.putExtra(JoyUser.ANNOUNCEMENT, user.getAnnouncement());

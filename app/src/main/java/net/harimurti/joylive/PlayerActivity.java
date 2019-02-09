@@ -39,7 +39,7 @@ public class PlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player);
 
         Bundle bundle = getIntent().getExtras();
-        String id = bundle.getString(JoyUser.MID);
+        String id = bundle.getString(JoyUser.ID);
         String profilePic = bundle.getString(JoyUser.PROFILEPIC);
         String nickname = bundle.getString(JoyUser.NICKNAME);
         String announcement = bundle.getString(JoyUser.ANNOUNCEMENT);

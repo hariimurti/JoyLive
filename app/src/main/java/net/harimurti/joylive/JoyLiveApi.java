@@ -89,9 +89,8 @@ public class JoyLiveApi {
 
                     int count = 0;
                     for (JoyUser user: users) {
+                        // only girls
                         if (!user.getSex().equals("2")) continue;
-
-                        Log.e("JSON", "RID : " + user.getRid());
 
                         count++;
                         MainActivity.AddUser(user);
