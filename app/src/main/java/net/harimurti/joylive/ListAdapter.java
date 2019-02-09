@@ -18,13 +18,22 @@ import java.util.ArrayList;
 
 public class ListAdapter extends ArrayAdapter<JoyUser> {
 
-    private static class ViewHolder {
+    private class ViewHolder {
         ImageView image;
         TextView nickname;
         TextView status;
         TextView viewer;
         ImageButton play;
         ImageButton menu;
+
+        public ViewHolder(View view) {
+            image = view.findViewById(R.id.iv_picture);
+            nickname = view.findViewById(R.id.tv_nickname);
+            status = view.findViewById(R.id.tv_status);
+            viewer = view.findViewById(R.id.tv_viewer);
+            play = view.findViewById(R.id.ib_play);
+            menu = view.findViewById(R.id.ib_menu);
+        }
     }
 
     public ListAdapter(Context context, ArrayList<JoyUser> dataSet) {
@@ -33,41 +42,35 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final JoyUser content = getItem(position);
+        final JoyUser user = getItem(position);
         ViewHolder viewHolder;
 
         if (convertView == null) {
-            viewHolder = new ViewHolder();
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.content, parent, false);
-            viewHolder.image = convertView.findViewById(R.id.iv_picture);
-            viewHolder.nickname = convertView.findViewById(R.id.tv_nickname);
-            viewHolder.status = convertView.findViewById(R.id.tv_status);
-            viewHolder.viewer = convertView.findViewById(R.id.tv_viewer);
-            viewHolder.play = convertView.findViewById(R.id.ib_play);
-            viewHolder.menu = convertView.findViewById(R.id.ib_menu);
+            convertView = LayoutInflater.from(getContext())
+                    .inflate(R.layout.content, parent, false);
+            viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
         Picasso.get()
-                .load(content.getProfilePic())
+                .load(user.getProfilePic())
                 .error(R.drawable.ic_no_image)
                 .into(viewHolder.image);
-        viewHolder.nickname.setText(content.getNickname());
-        viewHolder.status.setText(content.getAnnouncement());
-        viewHolder.viewer.setText(content.getViewer());
+        viewHolder.nickname.setText(user.getNickname());
+        viewHolder.status.setText(user.getAnnouncement());
+        viewHolder.viewer.setText(user.getViewer());
         viewHolder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Link.OpenPlayer(content);
+                Link.OpenPlayer(user);
             }
         });
         viewHolder.menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.AddFavUser(content);
+                MainActivity.AddFavUser(user);
             }
         });
 
