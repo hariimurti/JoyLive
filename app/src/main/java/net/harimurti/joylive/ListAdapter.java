@@ -37,7 +37,7 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
     }
 
     public ListAdapter(Context context, ArrayList<JoyUser> dataSet) {
-        super(context, R.layout.content, dataSet);
+        super(context, R.layout.main_content, dataSet);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext())
-                    .inflate(R.layout.content, parent, false);
+                    .inflate(R.layout.main_content, parent, false);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {

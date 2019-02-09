@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         listFavorite.addAll(pref.getFavorite());
 
         listAdapter = new ListAdapter(this, listFavAndUser);
-        final ListView listView = findViewById(R.id.content);
+        final ListView listView = findViewById(R.id.list_content);
         listView.setAdapter(listAdapter);
         listView.setEmptyView(findViewById(R.id.empty));
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
