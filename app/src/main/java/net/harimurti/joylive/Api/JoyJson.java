@@ -1,4 +1,6 @@
-package net.harimurti.joylive.JsonData;
+package net.harimurti.joylive.Api;
+
+import net.harimurti.joylive.Api.JoyData;
 
 public class JoyJson {
     private int errno;

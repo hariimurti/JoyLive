@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import net.harimurti.joylive.JsonData.JoyUser;
+import net.harimurti.joylive.Api.JoyUser;
 import net.harimurti.joylive.MainActivity;
 import net.harimurti.joylive.PlayerActivity;
 

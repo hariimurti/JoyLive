@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Classes.Preferences;
-import net.harimurti.joylive.JsonData.JoyUser;
+import net.harimurti.joylive.Api.JoyUser;
 
 import java.util.ArrayList;
 
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int amountVisible, int totalItems) {
 //                if (firstVisibleItem+1 + amountVisible > totalItems) {
-//                    JoyLiveApi.GetMoreUsers();
+//                    JoyLive.GetMoreUsers();
 //                }
             }
             @Override
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         listView.getFooterViewsCount()) >= (listAdapter.getCount() - 1)) {
 
                     //listView has hit the bottom
-                    JoyLiveApi.GetMoreUsers();
+                    JoyLive.GetMoreUsers();
                 }
             }
         });
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 listUser.clear();
-                JoyLiveApi.GetUsers(1);
+                JoyLive.GetUsers(1);
             }
         });
 
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 .registerReceiver(RefreshReceiver, filter);
 
         //load users for first time
-        JoyLiveApi.GetUsers(1);
+        JoyLive.GetUsers(1);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package net.harimurti.joylive;
+package net.harimurti.joylive.Api;
 
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -7,8 +7,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import net.harimurti.joylive.Classes.Notification;
-import net.harimurti.joylive.JsonData.JoyJson;
-import net.harimurti.joylive.JsonData.JoyUser;
+import net.harimurti.joylive.MainActivity;
 
 import java.io.IOException;
 
@@ -21,7 +20,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class JoyLiveApi {
+public class JoyLive {
     private static final String TAG = "API";
     private static int currentPage = 0;
     private static boolean working = false;

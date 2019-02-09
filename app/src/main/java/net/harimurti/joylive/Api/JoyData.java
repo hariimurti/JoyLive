@@ -1,4 +1,4 @@
-package net.harimurti.joylive.JsonData;
+package net.harimurti.joylive.Api;
 
 public class JoyData {
     private JoyUser[] rooms;

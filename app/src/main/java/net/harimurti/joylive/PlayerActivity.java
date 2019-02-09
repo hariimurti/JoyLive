@@ -22,7 +22,7 @@ import com.google.android.exoplayer2.util.Util;
 
 import net.harimurti.joylive.Classes.Link;
 import net.harimurti.joylive.Classes.Notification;
-import net.harimurti.joylive.JsonData.JoyUser;
+import net.harimurti.joylive.Api.JoyUser;
 
 import java.util.Locale;
 

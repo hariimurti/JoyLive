@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import net.harimurti.joylive.Classes.Link;
-import net.harimurti.joylive.JsonData.JoyUser;
+import net.harimurti.joylive.Api.JoyUser;
 
 import java.util.ArrayList;
 
