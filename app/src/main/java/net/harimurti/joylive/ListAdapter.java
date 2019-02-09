@@ -51,7 +51,10 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Picasso.get().load(content.getProfilePic()).error(R.drawable.ic_no_image).into(viewHolder.image);
+        Picasso.get()
+                .load(content.getProfilePic())
+                .error(R.drawable.ic_no_image)
+                .into(viewHolder.image);
         viewHolder.nickname.setText(content.getNickname());
         viewHolder.status.setText(content.getAnnouncement());
         viewHolder.viewer.setText(content.getViewer());
