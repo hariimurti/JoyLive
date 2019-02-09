@@ -17,8 +17,6 @@ import net.harimurti.joylive.JsonData.JoyUser;
 import java.util.ArrayList;
 
 public class ListAdapter extends ArrayAdapter<JoyUser> {
-    private Context context;
-    private ArrayList<JoyUser> dataSet;
 
     private static class ViewHolder {
         ImageView image;
@@ -31,8 +29,6 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
 
     public ListAdapter(Context context, ArrayList<JoyUser> dataSet) {
         super(context, R.layout.content, dataSet);
-        this.context = context;
-        this.dataSet = dataSet;
     }
 
     @Override
