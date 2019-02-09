@@ -67,22 +67,21 @@ public class PlayerActivity extends AppCompatActivity {
         Player.EventListener eventListener = new Player.EventListener() {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
-                String errorMessage = "Something went wrong! Try again later.";
+                String errorMessage = "%s went wrong! Try again later.";
 
                 switch (error.type) {
                     case ExoPlaybackException.TYPE_SOURCE:
-                        errorMessage = error.getSourceException().getMessage();
+                        errorMessage = String.format(errorMessage, "Source");
                         Log.e("Player", "TYPE_SOURCE: " + errorMessage);
                         break;
 
                     case ExoPlaybackException.TYPE_RENDERER:
-                        errorMessage = error.getRendererException().getMessage();
+                        errorMessage = String.format(errorMessage, "Renderer");
                         Log.e("Player", "TYPE_RENDERER: " + errorMessage);
                         break;
 
-                    case ExoPlaybackException.TYPE_UNEXPECTED:
-                        errorMessage = error.getUnexpectedException().getMessage();
-                        Log.e("Player", "TYPE_UNEXPECTED: " + errorMessage);
+                    default:
+                        errorMessage = String.format(errorMessage, "Something");
                         break;
                 }
 
