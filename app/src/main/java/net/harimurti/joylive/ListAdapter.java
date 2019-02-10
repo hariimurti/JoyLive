@@ -70,7 +70,7 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
         viewHolder.menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.AddFavUser(user);
+                //MainActivity.AddFavUser(user);
             }
         });
 

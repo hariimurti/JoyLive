@@ -91,8 +91,7 @@ public class JoyLive {
                         // only girls
                         if (!user.getSex().equals("2")) continue;
 
-                        count++;
-                        MainActivity.AddUser(user);
+                        if (MainActivity.AddUser(user)) count++;
                     }
 
                     Log.d(TAG, "Found " + Integer.toString(count) + " new girls");

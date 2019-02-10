@@ -30,9 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce;
     private SwipeRefreshLayout swipeRefresh;
-    private static ArrayList<JoyUser> listFavAndUser = new ArrayList<>();
     private static ArrayList<JoyUser> listUser = new ArrayList<>();
-    private static ArrayList<JoyUser> listFavorite = new ArrayList<>();
     private static ListAdapter listAdapter;
     private static Context context;
     private static Preferences pref;
@@ -45,9 +43,8 @@ public class MainActivity extends AppCompatActivity {
         context = this;
 
         pref = new Preferences();
-        listFavorite.addAll(pref.getFavorite());
 
-        listAdapter = new ListAdapter(this, listFavAndUser);
+        listAdapter = new ListAdapter(this, listUser);
         final ListView listView = findViewById(R.id.list_content);
         listView.setAdapter(listAdapter);
         listView.setEmptyView(findViewById(R.id.empty));
@@ -160,26 +157,12 @@ public class MainActivity extends AppCompatActivity {
         return context;
     }
 
-    public static void AddUser(JoyUser user) {
-        if (!listUser.contains(user))
+    public static boolean AddUser(JoyUser user) {
+        if (!JoyUser.isContainInList(listUser, user)) {
             listUser.add(user);
-
-        if (!listFavAndUser.contains(user))
-            listFavAndUser.add(user);
-    }
-
-    public static void AddFavUser(JoyUser user) {
-        if (!pref.addFavorite(user))
-            return;
-
-        listFavorite.add(user);
-        listUser.remove(user);
-
-        listFavAndUser.clear();
-        listFavAndUser.addAll(listFavorite);
-        listFavAndUser.addAll(listUser);
-
-        listAdapter.notifyDataSetChanged();
+            return true;
+        }
+        return false;
     }
 
     private final BroadcastReceiver RefreshReceiver = new BroadcastReceiver() {
