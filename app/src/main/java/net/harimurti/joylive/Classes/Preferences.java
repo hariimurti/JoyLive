@@ -11,6 +11,7 @@ import net.harimurti.joylive.App;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Preferences {
@@ -73,10 +74,15 @@ public class Preferences {
         setString(FAVORITE_LIST, json);
     }
 
+    public boolean isFavorite(JoyUser user) {
+        ArrayList<JoyUser> list = getFavorite();
+        return JoyUser.isContainInList(list, user);
+    }
+
     public boolean addFavorite(JoyUser user) {
         ArrayList<JoyUser> list = getFavorite();
 
-        if (list.contains(user))
+        if (isFavorite(user))
             return false;
 
         list.add(user);
@@ -87,11 +93,11 @@ public class Preferences {
     public boolean remFavorite(JoyUser user) {
         ArrayList<JoyUser> list = getFavorite();
 
-        if (!list.contains(user))
+        if (!isFavorite(user))
             return false;
 
-        list.remove(user);
-        setFavorite(list);
+        ArrayList<JoyUser> newList = JoyUser.removeFromList(list, user);
+        setFavorite(newList);
         return true;
     }
 }

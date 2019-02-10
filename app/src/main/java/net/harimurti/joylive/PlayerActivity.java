@@ -24,20 +24,23 @@ import com.google.android.exoplayer2.util.Util;
 
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Api.JoyUser;
+import net.harimurti.joylive.Classes.Preferences;
 
 import java.util.Locale;
 
 public class PlayerActivity extends AppCompatActivity {
+    private Preferences pref;
     private SimpleExoPlayer player;
     private RelativeLayout layoutMenu;
     private ImageButton favorite;
-    private boolean isFavorite;
     private JoyUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+
+        pref = new Preferences();
 
         Bundle bundle = getIntent().getExtras();
         String id = bundle.getString(JoyUser.ID);
@@ -50,6 +53,8 @@ public class PlayerActivity extends AppCompatActivity {
 
         layoutMenu = findViewById(R.id.layoutmenu);
         favorite = findViewById(R.id.ib_favorite);
+        favorite.setImageResource(pref.isFavorite(user) ? R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
+
         TextView tvNickname = findViewById(R.id.tv_nickname);
         tvNickname.setText(nickname);
 
@@ -114,15 +119,14 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     public void buttonFavoriteClick(View v) {
-        if (isFavorite) {
-            Notification.Toast(user.getNickname() + " — unFavorite!");
-            favorite.setImageResource(R.drawable.ic_action_unfavorite);
-        } else {
-            Notification.Toast(user.getNickname() + " — Favorite!");
-            favorite.setImageResource(R.drawable.ic_action_favorite);
+        if (!pref.isFavorite(user)) {
+            if(pref.addFavorite(user))
+                favorite.setImageResource(R.drawable.ic_action_favorite);
         }
-
-        isFavorite = !isFavorite;
+        else {
+            if(pref.remFavorite(user))
+                favorite.setImageResource(R.drawable.ic_action_unfavorite);
+        }
     }
 
     public void buttonShareClick(View v) {
