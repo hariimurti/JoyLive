@@ -39,8 +39,15 @@ public class JoyUser {
     }
 
     public static ArrayList<JoyUser> removeFromList(ArrayList<JoyUser> list, JoyUser o) {
-        list.removeAll(Collections.singleton(o));
-        return list;
+        ArrayList<JoyUser> tempList = new ArrayList<>();
+        String id = o.getId();
+        for (JoyUser x : list) {
+            if (x.getId().equals(id))
+                continue;
+
+            tempList.add(x);
+        }
+        return tempList;
     }
 
     public String getPlayStartTime() {
