@@ -2,6 +2,9 @@ package net.harimurti.joylive.Api;
 
 import net.harimurti.joylive.Classes.Converter;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class JoyUser {
     public static final String ID = "mid";
     public static final String NICKNAME = "nickname";
@@ -24,6 +27,20 @@ public class JoyUser {
         this.headPic = profilePic;
         this.announcement = announcement;
         this.videoPlayUrl = linkStream;
+    }
+
+    public static boolean isContainInList(ArrayList<JoyUser> list, JoyUser o) {
+        String id = o.getId();
+        for (JoyUser x : list) {
+            if (x.getId().equals(id))
+                return true;
+        }
+        return false;
+    }
+
+    public static ArrayList<JoyUser> removeFromList(ArrayList<JoyUser> list, JoyUser o) {
+        list.removeAll(Collections.singleton(o));
+        return list;
     }
 
     public String getPlayStartTime() {
