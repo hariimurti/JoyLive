@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import net.harimurti.joylive.App;
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.MainActivity;
 
@@ -96,7 +97,7 @@ public class JoyLive {
 
                     Log.d(TAG, "Found " + Integer.toString(count) + " new girls");
 
-                    LocalBroadcastManager.getInstance(MainActivity.getContext())
+                    LocalBroadcastManager.getInstance(App.getContext())
                             .sendBroadcast(new Intent("RefreshAdapter"));
 
                     Notification.Toast("Found " + Integer.toString(count) + " new girls");

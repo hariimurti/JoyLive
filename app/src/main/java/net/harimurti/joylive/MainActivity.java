@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefresh;
     private static ArrayList<JoyUser> listUser = new ArrayList<>();
     private static ListAdapter listAdapter;
-    private static Context context;
     private static Preferences pref;
 
     @Override
@@ -40,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle(R.string.app_title);
-        context = this;
 
         pref = new Preferences();
 
@@ -151,10 +149,6 @@ public class MainActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);
-    }
-
-    public static Context getContext() {
-        return context;
     }
 
     public static boolean AddUser(JoyUser user) {

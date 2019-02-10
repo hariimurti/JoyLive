@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 
 import net.harimurti.joylive.Api.JoyUser;
-import net.harimurti.joylive.MainActivity;
+import net.harimurti.joylive.App;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +22,7 @@ public class Preferences {
     private SharedPreferences.Editor prefEditor;
 
     public Preferences() {
-        Context context = MainActivity.getContext();
+        Context context = App.getContext();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 

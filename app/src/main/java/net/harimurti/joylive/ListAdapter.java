@@ -1,6 +1,8 @@
 package net.harimurti.joylive;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +13,14 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import net.harimurti.joylive.Classes.Link;
 import net.harimurti.joylive.Api.JoyUser;
+import net.harimurti.joylive.Classes.Notification;
+import net.harimurti.joylive.Classes.Preferences;
 
 import java.util.ArrayList;
 
 public class ListAdapter extends ArrayAdapter<JoyUser> {
+    private Context context;
 
     private class ViewHolder {
         ImageView image;
@@ -38,6 +42,7 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
 
     public ListAdapter(Context context, ArrayList<JoyUser> dataSet) {
         super(context, R.layout.main_content, dataSet);
+        this.context = context;
     }
 
     @Override
@@ -64,7 +69,27 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
         viewHolder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Link.OpenPlayer(user);
+                Preferences pref = new Preferences();
+
+                try {
+                    if (pref.getBoolean(Preferences.KEY_3RD_PLAYER)) {
+                        Uri uriStream = Uri.parse(user.getLinkStream());
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uriStream);
+                        context.startActivity(intent);
+                        return;
+                    }
+                }
+                catch (Exception e) {
+                    Notification.Toast("Tidak bisa membuka Player luar, pakai bawaan saja!");
+                }
+
+                Intent intent = new Intent(context, PlayerActivity.class);
+                intent.putExtra(JoyUser.ID, user.getId());
+                intent.putExtra(JoyUser.NICKNAME, user.getNickname());
+                intent.putExtra(JoyUser.PROFILEPIC, user.getProfilePic());
+                intent.putExtra(JoyUser.ANNOUNCEMENT, user.getAnnouncement());
+                intent.putExtra(JoyUser.LINKSTREAM, user.getLinkStream());
+                context.startActivity(intent);
             }
         });
         viewHolder.menu.setOnClickListener(new View.OnClickListener() {

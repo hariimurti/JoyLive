@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
-import net.harimurti.joylive.MainActivity;
+import net.harimurti.joylive.App;
 
 public class Notification {
 
@@ -14,7 +14,7 @@ public class Notification {
     }
 
     public static void Toast(String text, boolean isLong) {
-        Context context = MainActivity.getContext();
+        Context context = App.getContext();
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {

@@ -1,5 +1,7 @@
 package net.harimurti.joylive;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,7 +22,6 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
-import net.harimurti.joylive.Classes.Link;
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Api.JoyUser;
 
@@ -126,9 +127,13 @@ public class PlayerActivity extends AppCompatActivity {
 
     public void buttonShareClick(View v) {
         String text = String.format(Locale.getDefault(),
-                "%s — %s\n▶LiveShow : %s",
+                "%s — %s\n\n▶ LiveShow » %s",
                 user.getNickname(), user.getAnnouncement(), user.getLinkPlaylist());
-        Link.Share(text);
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "JoyLive.tv Streaming");
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+        this.startActivity(Intent.createChooser(intent, "Share URL"));
     }
 
     public void onLayoutMenu(View v) {
