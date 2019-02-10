@@ -127,7 +127,7 @@ public class PlayerActivity extends AppCompatActivity {
         player.setPlayWhenReady(false);
     }
 
-    public void buttonFavoriteClick(View v) {
+    public void onFavoriteClick(View v) {
         if (!pref.isFavorite(user)) {
             if(pref.addFavorite(user))
                 favorite.setImageResource(R.drawable.ic_action_favorite);
@@ -138,7 +138,7 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
-    public void buttonShareClick(View v) {
+    public void onShareClick(View v) {
         String text = String.format(Locale.getDefault(),
                 "%s — %s\n\n▶ LiveShow » %s",
                 user.getNickname(), user.getAnnouncement(), user.getLinkPlaylist());
