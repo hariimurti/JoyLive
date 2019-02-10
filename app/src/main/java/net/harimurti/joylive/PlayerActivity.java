@@ -1,6 +1,5 @@
 package net.harimurti.joylive;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -21,12 +20,15 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Api.JoyUser;
 import net.harimurti.joylive.Classes.Preferences;
 
 import java.util.Locale;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PlayerActivity extends AppCompatActivity {
     private Preferences pref;
@@ -52,11 +54,18 @@ public class PlayerActivity extends AppCompatActivity {
         user = new JoyUser(id, nickname, profilePic, announcement, linkStream);
 
         layoutMenu = findViewById(R.id.layoutmenu);
-        favorite = findViewById(R.id.ib_favorite);
-        favorite.setImageResource(pref.isFavorite(user) ? R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
 
         TextView tvNickname = findViewById(R.id.tv_nickname);
         tvNickname.setText(nickname);
+
+        CircleImageView image = findViewById(R.id.iv_picture);
+        Picasso.get()
+                .load(user.getProfilePic())
+                .error(R.drawable.ic_no_image)
+                .into(image);
+
+        favorite = findViewById(R.id.ib_favorite);
+        favorite.setImageResource(pref.isFavorite(user) ? R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
 
         Notification.Toast("Opening Stream : " + nickname);
 
