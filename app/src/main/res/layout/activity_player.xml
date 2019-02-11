@@ -34,8 +34,6 @@
                     app:civ_border_color="@color/cardview_dark_background"/>
 
                 <android.support.v7.widget.CardView
-                    android:id="@+id/card_nickname"
-                    android:maxWidth="@dimen/player_width_card_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -48,14 +46,19 @@
 
                     <TextView
                         android:id="@+id/tv_nickname"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
                         android:ellipsize="end"
+                        android:maxWidth="@dimen/player_width_card_nickname"
                         android:singleLine="true"
-                        android:textColor="@color/cardview_light_background" />
+                        android:textAlignment="center"
+                        android:textColor="@color/cardview_light_background"
+                        android:textSize="12sp" />
 
                 </android.support.v7.widget.CardView>
 
@@ -76,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/layoutmenu"
-                android:onClick="onLayoutMenu"
+                android:onClick="onLayoutMenuClick"
                 android:background="@null"/>
 
         </RelativeLayout>

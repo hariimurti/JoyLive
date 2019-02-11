@@ -151,7 +151,7 @@ public class PlayerActivity extends AppCompatActivity {
         this.startActivity(Intent.createChooser(intent, "Share URL"));
     }
 
-    public void onLayoutMenu(View v) {
+    public void onLayoutMenuClick(View v) {
         layoutMenu.setVisibility(
                 layoutMenu.getVisibility() == View.VISIBLE ?  View.INVISIBLE : View.VISIBLE);
     }
