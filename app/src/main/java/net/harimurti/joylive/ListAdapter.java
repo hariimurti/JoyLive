@@ -1,8 +1,10 @@
 package net.harimurti.joylive;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,10 +98,45 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
         viewHolder.menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //MainActivity.AddFavUser(user);
+                showDetailedUser(parent, user);
             }
         });
 
         return convertView;
+    }
+
+    private void showDetailedUser(ViewGroup parent, JoyUser user) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        View dialogView = LayoutInflater.from(getContext())
+                .inflate(R.layout.dialog_user, parent, false);
+        dialog.setView(dialogView);
+        dialog.setCancelable(true);
+//                dialog.setIcon(R.mipmap.ic_launcher);
+//                dialog.setTitle("JoyLive : " + user.getNickname());
+
+        CircleImageView image = dialogView.findViewById(R.id.iv_picture);
+        Picasso.get()
+                .load(user.getProfilePic())
+                .error(R.drawable.ic_no_image)
+                .into(image);
+        TextView id = dialogView.findViewById(R.id.tv_id);
+        id.setText(user.getId());
+        TextView nickname = dialogView.findViewById(R.id.tv_nickname);
+        nickname.setText(user.getNickname());
+        TextView status = dialogView.findViewById(R.id.tv_status);
+        status.setText(user.getAnnouncement());
+        TextView viewer = dialogView.findViewById(R.id.tv_viewer);
+        viewer.setText(user.getViewer());
+        TextView starttime = dialogView.findViewById(R.id.tv_starttime);
+        starttime.setText(user.getPlayStartTime());
+
+        dialog.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 }
