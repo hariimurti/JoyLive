@@ -82,25 +82,27 @@ public class PlayerActivity extends AppCompatActivity {
         Player.EventListener eventListener = new Player.EventListener() {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
-                String errorMessage = "%s went wrong! Try again later.";
+                String errorMessage = "%s went wrong! Reloading...";
 
                 switch (error.type) {
                     case ExoPlaybackException.TYPE_SOURCE:
                         errorMessage = String.format(errorMessage, "Source");
-                        Log.e("Player", "TYPE_SOURCE: " + errorMessage);
+                        Log.e("Player", "TYPE_SOURCE: " + error.getSourceException());
                         break;
 
                     case ExoPlaybackException.TYPE_RENDERER:
                         errorMessage = String.format(errorMessage, "Renderer");
-                        Log.e("Player", "TYPE_RENDERER: " + errorMessage);
+                        Log.e("Player", "TYPE_RENDERER: " + error.getRendererException());
                         break;
 
                     default:
                         errorMessage = String.format(errorMessage, "Something");
+                        Log.e("Player", "TYPE_UNEXPECTED: " + error.getUnexpectedException());
                         break;
                 }
 
                 Notification.Toast(errorMessage);
+                player.setPlayWhenReady(true);
             }
         };
 
