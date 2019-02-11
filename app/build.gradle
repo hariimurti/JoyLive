@@ -22,7 +22,7 @@ android {
         }
     }
 
-    if(_minor == 10){
+    if (_minor == 10) {
         _minor = 0
         _major = _major + 1
     }

@@ -110,6 +110,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_favorite:
+                Intent intent = new Intent(this, FavoriteActivity.class);
+                startActivity(intent);
+                break;
+
             case R.id.action_about:
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);
                 dialog.setMessage("Haii, Haloooooo\n\n" +
