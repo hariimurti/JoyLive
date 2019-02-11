@@ -26,50 +26,24 @@
         <TextView
             android:id="@+id/tv_nickname"
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="25dp"
             android:ellipsize="end"
+            android:gravity="bottom"
             android:singleLine="true"
+            android:textAlignment="gravity"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
-        <Space
+        <TextView
+            android:id="@+id/tv_status"
             android:layout_width="match_parent"
-            android:layout_height="5dp" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="20dp">
-
-            <TextView
-                android:id="@+id/tv_status"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_toStartOf="@+id/icon_view"
-                android:ellipsize="end"
-                android:gravity="bottom"
-                android:singleLine="true"
-                android:textStyle="italic" />
-
-            <ImageButton
-                android:id="@+id/icon_view"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_toStartOf="@+id/tv_viewer"
-                android:background="@null"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_tv" />
-
-            <TextView
-                android:id="@+id/tv_viewer"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:gravity="bottom"
-                android:singleLine="true"
-                android:textStyle="italic" />
-
-        </RelativeLayout>
+            android:layout_height="20dp"
+            android:ellipsize="end"
+            android:gravity="top"
+            android:singleLine="true"
+            android:textAlignment="gravity"
+            android:textSize="12sp"
+            android:textStyle="italic" />
 
     </LinearLayout>
 
@@ -81,17 +55,45 @@
         android:orientation="horizontal"
         android:layout_marginEnd="12dp">
 
-        <ImageButton
-            android:id="@+id/ib_play"
+        <RelativeLayout
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_action_play" />
+            android:layout_marginEnd="10dp">
 
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="match_parent" />
+            <ImageButton
+                android:id="@+id/ib_play"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_action_play" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ib_play"
+                android:layout_centerHorizontal="true"
+                app:cardBackgroundColor="#AFB1B3"
+                app:cardCornerRadius="5dp">
+
+                <TextView
+                    android:id="@+id/tv_viewer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="false"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:maxWidth="30dp"
+                    android:minWidth="10dp"
+                    android:singleLine="true"
+                    android:textAlignment="center"
+                    android:textSize="10sp"
+                    android:textStyle="italic" />
+
+            </android.support.v7.widget.CardView>
+
+        </RelativeLayout>
 
         <ImageButton
             android:id="@+id/ib_menu"
