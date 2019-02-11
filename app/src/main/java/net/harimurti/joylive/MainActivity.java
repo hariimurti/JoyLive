@@ -113,8 +113,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_about:
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);
                 dialog.setMessage("Haii, Haloooooo\n\n" +
-                        "Aplikasi ini aku tujukan kepada om-om yg suka nonton joylive!\n\n" +
-                        "Selamat menikmati \uD83D\uDE18")
+                        "Aplikasi ini aku tujukan kepada om-om yg suka nonton joylive!\n" +
+                        "Selamat menikmati \uD83D\uDE18\n\n" +
+                        "Telegram : @paijemdev")
                         .setTitle(R.string.app_name)
                         .create();
                 dialog.show();
@@ -135,11 +136,11 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
-            return;
+            finish();
         }
-
-        if (!this.doubleBackToExitPressedOnce)
+        else {
             Notification.Toast("Aduh, kok udahan si om??\nPencet sekali lagi dong ahh..");
+        }
 
         this.doubleBackToExitPressedOnce = true;
 
