@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import net.harimurti.joylive.Api.JoyUser;
-import net.harimurti.joylive.Classes.Preferences;
+import net.harimurti.joylive.Classes.Checker;
 
 import java.util.ArrayList;
 
@@ -25,12 +25,14 @@ public class FavoriteAdapter extends ArrayAdapter<JoyUser> {
         CircleImageView image;
         TextView nickname;
         TextView status;
+        TextView lastseen;
         ImageButton play;
 
         public ViewHolder(View view) {
             image = view.findViewById(R.id.iv_picture);
             nickname = view.findViewById(R.id.tv_nickname);
             status = view.findViewById(R.id.tv_status);
+            lastseen = view.findViewById(R.id.tv_lastseen);
             play = view.findViewById(R.id.ib_play);
         }
     }
@@ -58,8 +60,16 @@ public class FavoriteAdapter extends ArrayAdapter<JoyUser> {
                 .load(user.getProfilePic())
                 .error(R.drawable.ic_no_image)
                 .into(viewHolder.image);
+
+        Checker checker = new Checker();
+        checker.link(user.getLinkPlaylist());
+        checker.into(viewHolder.play);
+        checker.setText("Checking...");
+        checker.into(viewHolder.status);
+        checker.execute();
+
         viewHolder.nickname.setText(user.getNickname());
-        viewHolder.status.setText(user.getPlayStartTime());
+        viewHolder.lastseen.setText(user.getPlayStartTime());
         viewHolder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
