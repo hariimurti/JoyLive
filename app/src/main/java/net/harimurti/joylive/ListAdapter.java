@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -16,6 +17,7 @@ import com.squareup.picasso.Picasso;
 import net.harimurti.joylive.Api.JoyUser;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -28,7 +30,7 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
         TextView status;
         TextView viewer;
         ImageButton play;
-        ImageButton menu;
+        LinearLayout layout;
 
         public ViewHolder(View view) {
             image = view.findViewById(R.id.iv_picture);
@@ -36,7 +38,7 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
             status = view.findViewById(R.id.tv_status);
             viewer = view.findViewById(R.id.tv_viewer);
             play = view.findViewById(R.id.ib_play);
-            menu = view.findViewById(R.id.ib_menu);
+            layout = view.findViewById(R.id.layout_user);
         }
     }
 
@@ -78,7 +80,7 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
                 context.startActivity(intent);
             }
         });
-        viewHolder.menu.setOnClickListener(new View.OnClickListener() {
+        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDetailedUser(parent, user);
@@ -94,8 +96,6 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
                 .inflate(R.layout.dialog_user, parent, false);
         dialog.setView(dialogView);
         dialog.setCancelable(true);
-//                dialog.setIcon(R.mipmap.ic_launcher);
-//                dialog.setTitle("JoyLive : " + user.getNickname());
 
         CircleImageView image = dialogView.findViewById(R.id.iv_picture);
         Picasso.get()
@@ -112,6 +112,20 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
         viewer.setText(user.getViewer());
         TextView starttime = dialogView.findViewById(R.id.tv_starttime);
         starttime.setText(user.getPlayStartTime());
+
+        dialog.setNeutralButton("Share", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String text = String.format(Locale.getDefault(),
+                        "%s — %s\n\n▶ LiveShow » %s",
+                        user.getNickname(), user.getAnnouncement(), user.getLinkPlaylist());
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "JoyLive.tv Streaming");
+                intent.putExtra(Intent.EXTRA_TEXT, text);
+                context.startActivity(Intent.createChooser(intent, "Share URL"));
+            }
+        });
 
         dialog.setNegativeButton("Close", new DialogInterface.OnClickListener() {
             @Override
