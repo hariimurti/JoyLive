@@ -103,6 +103,7 @@ public class PlayerActivity extends AppCompatActivity {
                 }
 
                 Notification.Toast(errorMessage);
+                player.setPlayWhenReady(false);
                 player.setPlayWhenReady(true);
             }
         };
