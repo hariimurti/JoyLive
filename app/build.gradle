@@ -18,7 +18,7 @@ android {
         }
         if (item.contains("clean")) {
             _minor = _minor + 1
-            _patch = 0
+            _patch = -1
         }
     }
 
