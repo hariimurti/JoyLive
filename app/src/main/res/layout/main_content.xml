@@ -75,7 +75,8 @@
                 android:layout_below="@id/ib_play"
                 android:layout_centerHorizontal="true"
                 app:cardBackgroundColor="#AFB1B3"
-                app:cardCornerRadius="5dp">
+                app:cardCornerRadius="5dp"
+                app:cardElevation="0dp">
 
                 <TextView
                     android:id="@+id/tv_viewer"
