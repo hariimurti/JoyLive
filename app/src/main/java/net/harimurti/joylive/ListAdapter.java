@@ -15,9 +15,9 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import net.harimurti.joylive.Api.JoyUser;
+import net.harimurti.joylive.Classes.Share;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -116,14 +116,7 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
         dialog.setNeutralButton("Share", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String text = String.format(Locale.getDefault(),
-                        "%s — %s\n\n▶ LiveShow » %s",
-                        user.getNickname(), user.getAnnouncement(), user.getLinkPlaylist());
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "JoyLive.tv Streaming");
-                intent.putExtra(Intent.EXTRA_TEXT, text);
-                context.startActivity(Intent.createChooser(intent, "Share URL"));
+                new Share(context).Link(user);
             }
         });
 

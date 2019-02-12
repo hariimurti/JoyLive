@@ -25,8 +25,7 @@ import com.squareup.picasso.Picasso;
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Api.JoyUser;
 import net.harimurti.joylive.Classes.Preferences;
-
-import java.util.Locale;
+import net.harimurti.joylive.Classes.Share;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -149,14 +148,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     public void onShareClick(View v) {
-        String text = String.format(Locale.getDefault(),
-                "%s — %s\n\n▶ LiveShow » %s",
-                user.getNickname(), user.getAnnouncement(), user.getLinkPlaylist());
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "JoyLive.tv Streaming");
-        intent.putExtra(Intent.EXTRA_TEXT, text);
-        this.startActivity(Intent.createChooser(intent, "Share URL"));
+        new Share(this).Link(user);
     }
 
     public void onLayoutMenuClick(View v) {
