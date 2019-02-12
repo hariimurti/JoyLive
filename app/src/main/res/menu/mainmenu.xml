@@ -4,7 +4,9 @@
 
     <item
         android:id="@+id/action_favorite"
-        android:title="Favorites"/>
+        android:icon="@drawable/ic_action_favorite_light"
+        android:title="Favorites"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_about"

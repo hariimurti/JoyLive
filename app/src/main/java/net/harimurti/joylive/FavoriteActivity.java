@@ -1,10 +1,15 @@
 package net.harimurti.joylive;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import net.harimurti.joylive.Api.JoyUser;
+import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Classes.Preferences;
 
 import java.util.ArrayList;
@@ -28,12 +33,53 @@ public class FavoriteActivity extends AppCompatActivity {
         listView.setEmptyView(findViewById(R.id.empty));
     }
 
+    private void RefreshList() {
+        listUser.clear();
+        listUser.addAll(pref.getFavorite());
+        favoriteAdapter.notifyDataSetChanged();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
 
-        listUser.clear();
-        listUser.addAll(pref.getFavorite());
-        favoriteAdapter.notifyDataSetChanged();
+        RefreshList();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.favoritemenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                RefreshList();
+                Notification.Toast("Refreshed!");
+                break;
+
+            case R.id.action_about:
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                dialog.setMessage("Haii, Haloooooo\n\n" +
+                        "Aplikasi ini aku tujukan kepada om-om yg suka nonton joylive!\n" +
+                        "Selamat menikmati \uD83D\uDE18\n\n" +
+                        "Telegram : @paijemdev")
+                        .setTitle(R.string.app_name)
+                        .create();
+                dialog.show();
+                break;
+
+            case R.id.action_exit:
+                this.finish();
+                break;
+
+            default:
+                break;
+        }
+
+        return true;
     }
 }
