@@ -31,19 +31,14 @@ public class FavoriteActivity extends AppCompatActivity {
         final ListView listView = findViewById(R.id.list_content);
         listView.setAdapter(favoriteAdapter);
         listView.setEmptyView(findViewById(R.id.empty));
-    }
 
-    private void RefreshList() {
-        listUser.clear();
-        listUser.addAll(pref.getFavorite());
-        favoriteAdapter.notifyDataSetChanged();
+        RefreshList(true);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        RefreshList();
+        RefreshList(false);
     }
 
     @Override
@@ -57,7 +52,7 @@ public class FavoriteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                RefreshList();
+                RefreshList(true);
                 Notification.Toast("Refreshed!");
                 break;
 
@@ -81,5 +76,19 @@ public class FavoriteActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private void RefreshList(boolean force) {
+        ArrayList<JoyUser> listFav = pref.getFavorite();
+
+        if (!force) {
+            if (listFav == null) return;
+            if (listUser.size() == listFav.size())
+                return;
+        }
+
+        listUser.clear();
+        listUser.addAll(pref.getFavorite());
+        favoriteAdapter.notifyDataSetChanged();
     }
 }

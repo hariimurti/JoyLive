@@ -2,7 +2,6 @@ package net.harimurti.joylive;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,10 +63,6 @@ public class FavoriteAdapter extends ArrayAdapter<JoyUser> {
         viewHolder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user.setPlayStartTimeNow();
-                new Preferences()
-                        .addOrUpdateFavorite(user);
-
                 Intent intent = new Intent(context, PlayerActivity.class);
                 intent.putExtra(JoyUser.ID, user.getId());
                 intent.putExtra(JoyUser.NICKNAME, user.getNickname());

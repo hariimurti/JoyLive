@@ -80,36 +80,42 @@ public class PlayerActivity extends AppCompatActivity {
         MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(Uri.parse(linkStream));
 
-        Player.EventListener eventListener = new Player.EventListener() {
+        player.prepare(videoSource);
+        player.addListener(new Player.EventListener() {
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                if (playWhenReady && (playbackState == 3)) {
+                    if (pref.isFavorite(user)) {
+                        user.setPlayStartTimeNow();
+                        pref.addOrUpdateFavorite(user);
+                    }
+                }
+            }
+
             @Override
             public void onPlayerError(ExoPlaybackException error) {
-                String errorMessage = "%s went wrong! Reloading...";
+                String errorMessage = "%s went wrong!";
 
                 switch (error.type) {
                     case ExoPlaybackException.TYPE_SOURCE:
                         errorMessage = String.format(errorMessage, "Source");
-                        Log.e("Player", "TYPE_SOURCE: " + error.getSourceException());
+                        Log.e("Player", "TYPE_SOURCE: " + error.getSourceException().getMessage());
                         break;
 
                     case ExoPlaybackException.TYPE_RENDERER:
                         errorMessage = String.format(errorMessage, "Renderer");
-                        Log.e("Player", "TYPE_RENDERER: " + error.getRendererException());
+                        Log.e("Player", "TYPE_RENDERER: " + error.getRendererException().getMessage());
                         break;
 
-                    default:
+                    case ExoPlaybackException.TYPE_UNEXPECTED:
                         errorMessage = String.format(errorMessage, "Something");
-                        Log.e("Player", "TYPE_UNEXPECTED: " + error.getUnexpectedException());
+                        Log.e("Player", "TYPE_UNEXPECTED: " + error.getUnexpectedException().getMessage());
                         break;
                 }
 
                 Notification.Toast(errorMessage);
-                player.setPlayWhenReady(false);
-                player.setPlayWhenReady(true);
             }
-        };
-
-        player.addListener(eventListener);
-        player.prepare(videoSource);
+        });
     }
 
     @Override
