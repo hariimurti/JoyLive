@@ -40,6 +40,18 @@ public class JoyUser {
         return false;
     }
 
+    public static ArrayList<JoyUser> updateFromList(ArrayList<JoyUser> list, JoyUser o) {
+        ArrayList<JoyUser> tempList = new ArrayList<>();
+        String id = o.getId();
+        for (JoyUser x : list) {
+            if (x.getId().equals(id))
+                tempList.add(o);
+            else
+                tempList.add(x);
+        }
+        return tempList;
+    }
+
     public static ArrayList<JoyUser> removeFromList(ArrayList<JoyUser> list, JoyUser o) {
         ArrayList<JoyUser> tempList = new ArrayList<>();
         String id = o.getId();
@@ -50,6 +62,10 @@ public class JoyUser {
             tempList.add(x);
         }
         return tempList;
+    }
+
+    public long getPlayStartTimeEpoch() {
+        return this.playStartTime;
     }
 
     public String getPlayStartTime() {
@@ -85,6 +101,9 @@ public class JoyUser {
     }
 
     public String getAnnouncement() {
+        if (this.announcement.isEmpty())
+            return "Hey, come and check my show now!";
+
         return this.announcement;
     }
 
