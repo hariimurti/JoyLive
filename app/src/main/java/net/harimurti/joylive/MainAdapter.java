@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ListAdapter extends ArrayAdapter<JoyUser> {
+public class MainAdapter extends ArrayAdapter<JoyUser> {
     private Context context;
 
     private class ViewHolder {
@@ -42,7 +42,7 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
         }
     }
 
-    public ListAdapter(Context context, ArrayList<JoyUser> dataSet) {
+    public MainAdapter(Context context, ArrayList<JoyUser> dataSet) {
         super(context, R.layout.main_content, dataSet);
         this.context = context;
     }

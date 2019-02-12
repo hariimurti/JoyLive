@@ -13,11 +13,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.AbsListView;
-import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.Switch;
 
 import net.harimurti.joylive.Api.JoyLive;
 import net.harimurti.joylive.Classes.Notification;
@@ -31,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean doubleBackToExitPressedOnce;
     private SwipeRefreshLayout swipeRefresh;
     private static ArrayList<JoyUser> listUser = new ArrayList<>();
-    private static ListAdapter listAdapter;
+    private static MainAdapter mainAdapter;
     private static Preferences pref;
 
     @Override
@@ -42,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
 
         pref = new Preferences();
 
-        listAdapter = new ListAdapter(this, listUser);
+        mainAdapter = new MainAdapter(this, listUser);
         final ListView listView = findViewById(R.id.list_content);
-        listView.setAdapter(listAdapter);
+        listView.setAdapter(mainAdapter);
         listView.setEmptyView(findViewById(R.id.empty));
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -57,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
                         && (listView.getLastVisiblePosition() - listView.getHeaderViewsCount() -
-                        listView.getFooterViewsCount()) >= (listAdapter.getCount() - 1)) {
+                        listView.getFooterViewsCount()) >= (mainAdapter.getCount() - 1)) {
 
                     //listView has hit the bottom
                     JoyLive.GetMoreUsers();
@@ -154,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
     private final BroadcastReceiver RefreshReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            listAdapter.notifyDataSetChanged();
+            mainAdapter.notifyDataSetChanged();
             swipeRefresh.setRefreshing(false);
         }
     };
