@@ -72,20 +72,6 @@ public class ListAdapter extends ArrayAdapter<JoyUser> {
         viewHolder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Preferences pref = new Preferences();
-
-                try {
-                    if (pref.getBoolean(Preferences.KEY_3RD_PLAYER)) {
-                        Uri uriStream = Uri.parse(user.getLinkStream());
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uriStream);
-                        context.startActivity(intent);
-                        return;
-                    }
-                }
-                catch (Exception e) {
-                    Notification.Toast("Tidak bisa membuka Player luar, pakai bawaan saja!");
-                }
-
                 Intent intent = new Intent(context, PlayerActivity.class);
                 intent.putExtra(JoyUser.ID, user.getId());
                 intent.putExtra(JoyUser.NICKNAME, user.getNickname());

@@ -90,20 +90,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.mainmenu, menu);
-
-        MenuItem item = menu.findItem(R.id.action_switch);
-        View view = item.getActionView();
-
-        Switch switcha = view.findViewById(R.id.sw_player);
-        switcha.setChecked(pref.getBoolean(Preferences.KEY_3RD_PLAYER));
-        switcha.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                boolean swb = switcha.isChecked();
-                pref.setBoolean(Preferences.KEY_3RD_PLAYER, swb);
-            }
-        });
-
         return true;
     }
 

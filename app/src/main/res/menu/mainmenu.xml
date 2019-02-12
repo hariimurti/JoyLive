@@ -3,12 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/action_switch"
-        android:title="3rd Player"
-        app:actionLayout="@layout/switch_item"
-        app:showAsAction="always"/>
-
-    <item
         android:id="@+id/action_favorite"
         android:title="Favorites"/>
 
