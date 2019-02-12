@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import net.harimurti.joylive.Api.JoyUser;
+import net.harimurti.joylive.Classes.Preferences;
 
 import java.util.ArrayList;
 
@@ -63,6 +64,10 @@ public class FavoriteAdapter extends ArrayAdapter<JoyUser> {
         viewHolder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                user.setPlayStartTimeNow();
+                new Preferences()
+                        .addOrUpdateFavorite(user);
+
                 Intent intent = new Intent(context, PlayerActivity.class);
                 intent.putExtra(JoyUser.ID, user.getId());
                 intent.putExtra(JoyUser.NICKNAME, user.getNickname());

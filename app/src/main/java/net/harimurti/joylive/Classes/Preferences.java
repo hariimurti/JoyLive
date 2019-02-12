@@ -80,22 +80,31 @@ public class Preferences {
     }
 
     public boolean addFavorite(JoyUser user) {
-        ArrayList<JoyUser> list = getFavorite();
-
         if (isFavorite(user))
             return false;
 
+        ArrayList<JoyUser> list = getFavorite();
         list.add(user);
         setFavorite(list);
         return true;
     }
 
-    public boolean remFavorite(JoyUser user) {
-        ArrayList<JoyUser> list = getFavorite();
+    public void addOrUpdateFavorite(JoyUser user) {
+        if (!isFavorite(user)) {
+            addFavorite(user);
+            return;
+        }
 
+        ArrayList<JoyUser> list = getFavorite();
+        ArrayList<JoyUser> newList = JoyUser.updateFromList(list, user);
+        setFavorite(newList);
+    }
+
+    public boolean remFavorite(JoyUser user) {
         if (!isFavorite(user))
             return false;
 
+        ArrayList<JoyUser> list = getFavorite();
         ArrayList<JoyUser> newList = JoyUser.removeFromList(list, user);
         setFavorite(newList);
         return true;
