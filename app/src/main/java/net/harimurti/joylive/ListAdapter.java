@@ -3,7 +3,6 @@ package net.harimurti.joylive;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +14,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import net.harimurti.joylive.Api.JoyUser;
-import net.harimurti.joylive.Classes.Notification;
-import net.harimurti.joylive.Classes.Preferences;
 
 import java.util.ArrayList;
 
