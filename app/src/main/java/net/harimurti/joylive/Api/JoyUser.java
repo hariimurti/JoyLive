@@ -5,6 +5,8 @@ import net.harimurti.joylive.Classes.Converter;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static java.lang.System.currentTimeMillis;
+
 public class JoyUser {
     public static final String ID = "mid";
     public static final String NICKNAME = "nickname";
@@ -52,6 +54,14 @@ public class JoyUser {
 
     public String getPlayStartTime() {
         return Converter.TimestampToHumanDate(this.playStartTime);
+    }
+
+    public void setPlayStartTime(long timestamp) {
+        this.playStartTime = timestamp;
+    }
+
+    public void setPlayStartTimeNow() {
+        setPlayStartTime(currentTimeMillis()/1000);
     }
 
     public String getSex() {

@@ -52,6 +52,7 @@ public class PlayerActivity extends AppCompatActivity {
         String linkStream = bundle.getString(JoyUser.LINKSTREAM);
 
         user = new JoyUser(id, nickname, profilePic, announcement, linkStream);
+        user.setPlayStartTimeNow();
 
         layoutMenu = findViewById(R.id.layoutmenu);
 
