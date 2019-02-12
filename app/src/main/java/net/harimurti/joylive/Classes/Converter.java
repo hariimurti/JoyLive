@@ -30,6 +30,18 @@ public class Converter {
             return link;
     }
 
+    public static String HttpToRtmp(String link) {
+        String pattern = "^https?://(.*)/playlist.m3u8";
+
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(link);
+
+        if (m.find())
+            return "rtmp://" + m.group(1);
+        else
+            return link;
+    }
+
     public static String TimestampToHumanDate(long epoch) {
         return new SimpleDateFormat("dd/MM/yy HH:mm:ss", Locale.getDefault())
                 .format(new Date(epoch*1000));

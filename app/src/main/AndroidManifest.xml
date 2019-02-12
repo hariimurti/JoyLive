@@ -13,15 +13,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".FavoriteActivity"></activity>
-        <activity
-            android:name=".PlayerActivity"
-            android:theme="@style/AppFullScreen" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".FavoriteActivity" />
+        <activity
+            android:name=".PlayerActivity"
+            android:theme="@style/AppFullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="pull.joylive.tv" android:pathPattern="/.*" android:scheme="http"/>
+                <data android:host="pull.cblive.tv" android:pathPattern="/.*" android:scheme="http"/>
             </intent-filter>
         </activity>
     </application>

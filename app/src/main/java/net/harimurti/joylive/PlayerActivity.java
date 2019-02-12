@@ -22,6 +22,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 
+import net.harimurti.joylive.Classes.Converter;
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Api.JoyUser;
 import net.harimurti.joylive.Classes.Preferences;
@@ -35,6 +36,7 @@ public class PlayerActivity extends AppCompatActivity {
     private RelativeLayout layoutMenu;
     private ImageButton favorite;
     private JoyUser user;
+    private boolean openFromExternal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,32 +44,46 @@ public class PlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player);
 
         pref = new Preferences();
-
-        Bundle bundle = getIntent().getExtras();
-        String id = bundle.getString(JoyUser.ID);
-        String profilePic = bundle.getString(JoyUser.PROFILEPIC);
-        String nickname = bundle.getString(JoyUser.NICKNAME);
-        String announcement = bundle.getString(JoyUser.ANNOUNCEMENT);
-        String linkStream = bundle.getString(JoyUser.LINKSTREAM);
-
-        user = new JoyUser(id, nickname, profilePic, announcement, linkStream);
-        user.setPlayStartTimeNow();
-
         layoutMenu = findViewById(R.id.layoutmenu);
 
-        TextView tvNickname = findViewById(R.id.tv_nickname);
-        tvNickname.setText(nickname);
+        Intent intent = getIntent();
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            openFromExternal = true;
+            Uri uri = intent.getData();
+            String playlist = uri.toString();
+            String linkStream = Converter.HttpToRtmp(playlist);
 
-        CircleImageView image = findViewById(R.id.iv_picture);
-        Picasso.get()
-                .load(user.getProfilePic())
-                .error(R.drawable.ic_no_image)
-                .into(image);
+            user = new JoyUser("", "", "", "", linkStream);
+        }
+        else {
+            Bundle bundle = getIntent().getExtras();
+            String id = bundle.getString(JoyUser.ID);
+            String profilePic = bundle.getString(JoyUser.PROFILEPIC);
+            String nickname = bundle.getString(JoyUser.NICKNAME);
+            String announcement = bundle.getString(JoyUser.ANNOUNCEMENT);
+            String linkStream = bundle.getString(JoyUser.LINKSTREAM);
 
-        favorite = findViewById(R.id.ib_favorite);
-        favorite.setImageResource(pref.isFavorite(user) ? R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
+            user = new JoyUser(id, nickname, profilePic, announcement, linkStream);
+            user.setPlayStartTimeNow();
+        }
 
-        Notification.Toast("Opening Stream : " + nickname);
+        layoutMenu.setVisibility(openFromExternal ? View.INVISIBLE : View.VISIBLE);
+
+        if (!openFromExternal) {
+            Notification.Toast("Opening Stream : " + user.getNickname());
+
+            TextView tvNickname = findViewById(R.id.tv_nickname);
+            tvNickname.setText(user.getNickname());
+
+            CircleImageView image = findViewById(R.id.iv_picture);
+            Picasso.get()
+                    .load(user.getProfilePic())
+                    .error(R.drawable.ic_no_image)
+                    .into(image);
+
+            favorite = findViewById(R.id.ib_favorite);
+            favorite.setImageResource(pref.isFavorite(user) ? R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
+        }
 
         player = ExoPlayerFactory.newSimpleInstance(this);
 
@@ -77,7 +93,7 @@ public class PlayerActivity extends AppCompatActivity {
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
                 Util.getUserAgent(this, "ExoPlayer2"));
         MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(Uri.parse(linkStream));
+                .createMediaSource(Uri.parse(user.getLinkStream()));
 
         player.prepare(videoSource);
         player.addListener(new Player.EventListener() {
@@ -152,6 +168,8 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     public void onLayoutMenuClick(View v) {
+        if (openFromExternal) return;
+
         layoutMenu.setVisibility(
                 layoutMenu.getVisibility() == View.VISIBLE ?  View.INVISIBLE : View.VISIBLE);
     }
