@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class FavoriteActivity extends AppCompatActivity {
     private ArrayList<JoyUser> listUser = new ArrayList<>();
     private FavoriteAdapter favoriteAdapter;
+    private SwipeRefreshLayout swipeRefresh;
     private Preferences pref;
 
     @Override
@@ -27,6 +28,18 @@ public class FavoriteActivity extends AppCompatActivity {
         final ListView listView = findViewById(R.id.list_content);
         listView.setAdapter(favoriteAdapter);
         listView.setEmptyView(findViewById(R.id.empty));
+
+        swipeRefresh = findViewById(R.id.swipe_refresh);
+        swipeRefresh.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                RefreshList(true);
+            }
+        });
 
         RefreshList(true);
     }
@@ -49,5 +62,7 @@ public class FavoriteActivity extends AppCompatActivity {
         listUser.clear();
         listUser.addAll(pref.getFavorite());
         favoriteAdapter.notifyDataSetChanged();
+
+        swipeRefresh.setRefreshing(false);
     }
 }

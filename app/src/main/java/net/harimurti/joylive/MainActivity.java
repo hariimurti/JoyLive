@@ -17,7 +17,6 @@ import android.widget.ListView;
 import net.harimurti.joylive.Api.JoyLive;
 import net.harimurti.joylive.Classes.Menu;
 import net.harimurti.joylive.Classes.Notification;
-import net.harimurti.joylive.Classes.Preferences;
 import net.harimurti.joylive.Api.JoyUser;
 
 import java.util.ArrayList;
@@ -28,15 +27,12 @@ public class MainActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefresh;
     private static ArrayList<JoyUser> listUser = new ArrayList<>();
     private static MainAdapter mainAdapter;
-    private static Preferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle(R.string.app_title);
-
-        pref = new Preferences();
 
         mainAdapter = new MainAdapter(this, listUser);
         final ListView listView = findViewById(R.id.list_content);
@@ -45,10 +41,9 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int amountVisible, int totalItems) {
-//                if (firstVisibleItem+1 + amountVisible > totalItems) {
-//                    JoyLive.GetMoreUsers();
-//                }
+                //leave me alone
             }
+
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
@@ -61,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        swipeRefresh = findViewById(R.id.swiperefresh);
+        swipeRefresh = findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
