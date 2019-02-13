@@ -38,8 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@+id/iv_picture"
-                    android:onClick="onShareClick">
+                    android:layout_toEndOf="@+id/iv_picture">
 
                     <android.support.v7.widget.CardView
                         android:id="@+id/card_nickname"
@@ -48,7 +47,8 @@
                         android:layout_centerVertical="true"
                         app:cardBackgroundColor="@color/cardview_dark_background"
                         app:cardCornerRadius="5dp"
-                        app:cardElevation="5dp">
+                        app:cardElevation="5dp"
+                        android:onClick="onShareClick">
 
                         <TextView
                             android:id="@+id/tv_nickname"
@@ -76,7 +76,8 @@
                         android:layout_toEndOf="@+id/card_nickname"
                         android:background="@null"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/ic_action_share" />
+                        android:src="@drawable/ic_action_share"
+                        android:onClick="onShareClick" />
 
                 </RelativeLayout>
 
