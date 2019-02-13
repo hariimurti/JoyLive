@@ -2,23 +2,20 @@ package net.harimurti.joylive;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
 import net.harimurti.joylive.Api.JoyLive;
+import net.harimurti.joylive.Classes.Menu;
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Classes.Preferences;
 import net.harimurti.joylive.Api.JoyUser;
@@ -86,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.mainmenu, menu);
         return true;
@@ -101,32 +98,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.action_about:
-                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-                dialog.setMessage("Haii, Haloooooo\n\n" +
-                        "Aplikasi ini aku tujukan kepada om-om yg suka nonton joylive!\n" +
-                        "Selamat menikmati \uD83D\uDE18\n\n" +
-                        "Telegram : @paijemdev")
-                        .setTitle(R.string.app_name)
-                        .create();
-                dialog.setNeutralButton("Visit", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse("https://t.me/paijemdev"));
-                        startActivity(intent);
-                    }
-                });
-                dialog.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
+                Menu.About(this);
                 break;
 
             case R.id.action_exit:
-                this.finish();
+                Menu.Exit(this);
                 break;
 
             default:
@@ -140,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
-            finish();
+            Menu.Exit(this);
         }
         else {
             Notification.Toast("Aduh, kok udahan si om??\nPencet sekali lagi dong ahh..");
