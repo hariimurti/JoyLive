@@ -19,13 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".FavoriteActivity"
-            android:noHistory="true"/>
+        <activity android:name=".FavoriteActivity" />
         <activity
             android:name=".PlayerActivity"
-            android:theme="@style/AppFullScreen"
-            android:noHistory="true">
+            android:theme="@style/AppFullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
