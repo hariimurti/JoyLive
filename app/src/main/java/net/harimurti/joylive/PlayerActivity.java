@@ -84,6 +84,9 @@ public class PlayerActivity extends AppCompatActivity {
             favorite = findViewById(R.id.ib_favorite);
             favorite.setImageResource(pref.isFavorite(user) ? R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
         }
+        else {
+            Notification.Toast("Opening Stream");
+        }
 
         player = ExoPlayerFactory.newSimpleInstance(this);
 
