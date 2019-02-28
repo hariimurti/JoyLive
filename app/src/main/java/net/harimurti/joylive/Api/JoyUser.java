@@ -98,8 +98,12 @@ public class JoyUser {
         return this.headPic;
     }
 
-    public String getViewer() {
+    public String getViewerHumanReadable() {
         return Converter.LongNumberToHumanReadable(this.onlineNum);
+    }
+
+    public String getViewer() {
+        return Long.toString(this.onlineNum);
     }
 
     public String getAnnouncement() {

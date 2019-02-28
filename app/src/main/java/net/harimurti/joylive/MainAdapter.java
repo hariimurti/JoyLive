@@ -74,7 +74,7 @@ public class MainAdapter extends ArrayAdapter<JoyUser> {
             viewHolder.nickname.setText(user.getNickname());
 
         viewHolder.status.setText(user.getAnnouncement());
-        viewHolder.viewer.setText(user.getViewer());
+        viewHolder.viewer.setText(user.getViewerHumanReadable());
         viewHolder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,8 +125,8 @@ public class MainAdapter extends ArrayAdapter<JoyUser> {
         TextView price = dialogView.findViewById(R.id.tv_price);
         price.setText(String.format(Locale.getDefault(), "%d \uD83D\uDCB0", user.getPrice()));
 
-        TextView starttime = dialogView.findViewById(R.id.tv_starttime);
-        starttime.setText(user.getPlayStartTime());
+        TextView since = dialogView.findViewById(R.id.tv_starttime);
+        since.setText(user.getPlayStartTime());
 
         TextView viewer = dialogView.findViewById(R.id.tv_viewer);
         viewer.setText(user.getViewer());
