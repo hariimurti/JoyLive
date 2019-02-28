@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -113,23 +112,25 @@ public class FavoriteAdapter extends ArrayAdapter<JoyUser> {
                 .load(user.getProfilePic())
                 .error(R.drawable.ic_no_image)
                 .into(image);
+
         TextView id = dialogView.findViewById(R.id.tv_id);
         id.setText(user.getId());
+
         TextView nickname = dialogView.findViewById(R.id.tv_nickname);
         nickname.setText(user.getNickname());
+
         TextView status = dialogView.findViewById(R.id.tv_status);
         status.setText(user.getAnnouncement());
-        TextView starttime = dialogView.findViewById(R.id.tv_lastseen);
-        starttime.setText(user.getPlayStartTime());
+
+        TextView seen = dialogView.findViewById(R.id.tv_lastseen);
+        seen.setText(user.getPlayStartTime());
 
         dialog.setNeutralButton("Remove", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Preferences pref = new Preferences();
                 pref.remFavorite(user);
-
-                dataSet.clear();
-                dataSet.addAll(pref.getFavorite());
+                dataSet.remove(user);
                 notifyDataSetChanged();
             }
         });
