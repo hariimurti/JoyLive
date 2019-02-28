@@ -20,8 +20,10 @@ public class JoyUser {
     private String nickname;
     private String headPic;
     private long onlineNum;
+    private String fansNum;
     private String announcement;
     private String videoPlayUrl;
+    private int price;
 
     public JoyUser(String id, String nickname, String profilePic, String announcement, String linkStream) {
         this.mid = id;
@@ -105,6 +107,14 @@ public class JoyUser {
             return "Hey, come and check my show now!";
 
         return this.announcement;
+    }
+
+    public String getFansNum() {
+        return this.fansNum;
+    }
+
+    public int getPrice() {
+        return this.price;
     }
 
     public String getLinkStream() {

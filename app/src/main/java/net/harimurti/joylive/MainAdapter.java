@@ -18,6 +18,7 @@ import net.harimurti.joylive.Api.JoyUser;
 import net.harimurti.joylive.Classes.Share;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -65,7 +66,13 @@ public class MainAdapter extends ArrayAdapter<JoyUser> {
                 .load(user.getProfilePic())
                 .error(R.drawable.ic_no_image)
                 .into(viewHolder.image);
-        viewHolder.nickname.setText(user.getNickname());
+
+        if (user.getPrice() > 0)
+            viewHolder.nickname.setText(String.format(Locale.getDefault(),
+                    "%s - %d \uD83D\uDCB0", user.getNickname(), user.getPrice()));
+        else
+            viewHolder.nickname.setText(user.getNickname());
+
         viewHolder.status.setText(user.getAnnouncement());
         viewHolder.viewer.setText(user.getViewer());
         viewHolder.play.setOnClickListener(new View.OnClickListener() {
@@ -102,16 +109,27 @@ public class MainAdapter extends ArrayAdapter<JoyUser> {
                 .load(user.getProfilePic())
                 .error(R.drawable.ic_no_image)
                 .into(image);
+
         TextView id = dialogView.findViewById(R.id.tv_id);
         id.setText(user.getId());
+
         TextView nickname = dialogView.findViewById(R.id.tv_nickname);
         nickname.setText(user.getNickname());
+
         TextView status = dialogView.findViewById(R.id.tv_status);
         status.setText(user.getAnnouncement());
-        TextView viewer = dialogView.findViewById(R.id.tv_viewer);
-        viewer.setText(user.getViewer());
+
+        TextView fans = dialogView.findViewById(R.id.tv_fans);
+        fans.setText(user.getFansNum());
+
+        TextView price = dialogView.findViewById(R.id.tv_price);
+        price.setText(String.format(Locale.getDefault(), "%d \uD83D\uDCB0", user.getPrice()));
+
         TextView starttime = dialogView.findViewById(R.id.tv_starttime);
         starttime.setText(user.getPlayStartTime());
+
+        TextView viewer = dialogView.findViewById(R.id.tv_viewer);
+        viewer.setText(user.getViewer());
 
         dialog.setNeutralButton("Share", new DialogInterface.OnClickListener() {
             @Override
