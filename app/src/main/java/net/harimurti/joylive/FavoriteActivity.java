@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import net.harimurti.joylive.Api.JoyUser;
+import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Classes.Preferences;
 
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ public class FavoriteActivity extends AppCompatActivity {
         favoriteAdapter = new FavoriteAdapter(this, listUser);
         final ListView listView = findViewById(R.id.list_content);
         listView.setAdapter(favoriteAdapter);
-        listView.setEmptyView(findViewById(R.id.empty));
 
         swipeRefresh = findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -61,6 +61,9 @@ public class FavoriteActivity extends AppCompatActivity {
             }
 
             listUser.addAll(listFav);
+        }
+        else {
+            Notification.Toast("No Favorite User!");
         }
 
         favoriteAdapter.notifyDataSetChanged();

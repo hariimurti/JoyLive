@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         mainAdapter = new MainAdapter(this, listUser);
         final ListView listView = findViewById(R.id.list_content);
         listView.setAdapter(mainAdapter);
-        listView.setEmptyView(findViewById(R.id.empty));
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int amountVisible, int totalItems) {
