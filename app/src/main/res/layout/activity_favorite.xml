@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipe_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="10dp"
-    android:layout_marginBottom="10dp"
     tools:context=".FavoriteActivity">
 
-    <ListView
-        android:id="@+id/list_content"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        android:dividerHeight="0dp" />
+        android:layout_marginStart="10dp">
+
+        <ListView
+            android:id="@+id/list_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/swipe_refresh"
         android:gravity="center"
         android:text="NO FAVORITE USER AVAILABLE!"
         android:textAlignment="center"
         android:textSize="18sp"
         android:textStyle="italic" />
 
-</android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

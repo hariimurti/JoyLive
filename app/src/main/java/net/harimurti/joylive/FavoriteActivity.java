@@ -54,7 +54,7 @@ public class FavoriteActivity extends AppCompatActivity {
         ArrayList<JoyUser> listFav = pref.getFavorite();
 
         listUser.clear();
-        if (listFav != null) {
+        if (!listFav.isEmpty()) {
             if (!force) {
                 if (listUser.size() == listFav.size())
                     return;
