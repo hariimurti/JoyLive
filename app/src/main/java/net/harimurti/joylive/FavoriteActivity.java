@@ -53,16 +53,17 @@ public class FavoriteActivity extends AppCompatActivity {
     private void RefreshList(boolean force) {
         ArrayList<JoyUser> listFav = pref.getFavorite();
 
-        if (!force) {
-            if (listFav == null) return;
-            if (listUser.size() == listFav.size())
-                return;
+        listUser.clear();
+        if (listFav != null) {
+            if (!force) {
+                if (listUser.size() == listFav.size())
+                    return;
+            }
+
+            listUser.addAll(listFav);
         }
 
-        listUser.clear();
-        listUser.addAll(pref.getFavorite());
         favoriteAdapter.notifyDataSetChanged();
-
         swipeRefresh.setRefreshing(false);
     }
 }
