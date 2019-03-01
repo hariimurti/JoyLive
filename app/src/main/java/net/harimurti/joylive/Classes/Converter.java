@@ -1,5 +1,7 @@
 package net.harimurti.joylive.Classes;
 
+import net.harimurti.joylive.Api.JoyUser;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -28,6 +30,23 @@ public class Converter {
             return "http://" + m.group(1) + "/playlist.m3u8";
         else
             return link;
+    }
+
+    public static JoyUser LinkToUser(String link) {
+        String pattern = "^https?://(.*/(\\d+))/playlist.m3u8";
+
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(link);
+
+        if (m.find()) {
+            String rtmp = "rtmp://" + m.group(1);
+            String id = m.group(2);
+
+            return new JoyUser(id, "NoName", "", "NoStatus", rtmp);
+        }
+        else {
+            return new JoyUser("0", "NoName", "", "NoStatus", HttpToRtmp(link));
+        }
     }
 
     public static String HttpToRtmp(String link) {

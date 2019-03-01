@@ -58,9 +58,8 @@ public class PlayerActivity extends AppCompatActivity {
             openFromExternal = true;
             Uri uri = intent.getData();
             String playlist = uri.toString();
-            String linkStream = Converter.HttpToRtmp(playlist);
 
-            user = new JoyUser("", "", "", "", linkStream);
+            user = Converter.LinkToUser(playlist);
         }
         else {
             Bundle bundle = getIntent().getExtras();
