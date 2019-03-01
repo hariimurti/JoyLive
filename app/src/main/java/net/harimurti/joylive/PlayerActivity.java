@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -34,6 +37,8 @@ public class PlayerActivity extends AppCompatActivity {
     private Preferences pref;
     private SimpleExoPlayer player;
     private RelativeLayout layoutMenu;
+    private LinearLayout layoutOffline;
+    private ImageView bicPicture;
     private ImageButton favorite;
     private JoyUser user;
     private boolean openFromExternal;
@@ -44,7 +49,9 @@ public class PlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player);
 
         pref = new Preferences();
-        layoutMenu = findViewById(R.id.layoutmenu);
+        layoutMenu = findViewById(R.id.layout_menu);
+        layoutOffline = findViewById(R.id.layout_offline);
+        bicPicture = findViewById(R.id.iv_big_picture);
 
         Intent intent = getIntent();
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
@@ -81,11 +88,17 @@ public class PlayerActivity extends AppCompatActivity {
                     .error(R.drawable.ic_no_image)
                     .into(image);
 
+            Picasso.get()
+                    .load(user.getProfilePic())
+                    .error(R.drawable.ic_no_image)
+                    .into(bicPicture);
+
             favorite = findViewById(R.id.ib_favorite);
             favorite.setImageResource(pref.isFavorite(user) ? R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
         }
         else {
             Notification.Toast("Opening Stream");
+            bicPicture.setVisibility(View.INVISIBLE);
         }
 
         player = ExoPlayerFactory.newSimpleInstance(this);
@@ -102,36 +115,37 @@ public class PlayerActivity extends AppCompatActivity {
         player.addListener(new Player.EventListener() {
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                if (playWhenReady && (playbackState == 3)) {
-                    if (pref.isFavorite(user)) {
-                        user.setPlayStartTimeNow();
-                        pref.addOrUpdateFavorite(user);
+                if (playWhenReady) {
+                    if (playbackState == Player.STATE_READY) {
+                        if (pref.isFavorite(user)) {
+                            user.setPlayStartTimeNow();
+                            pref.addOrUpdateFavorite(user);
+                        }
                     }
+                }
+
+                if (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING) {
+                    bicPicture.setVisibility(View.INVISIBLE);
+                    layoutOffline.setVisibility(View.INVISIBLE);
+                }
+
+                if (playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED) {
+                    bicPicture.setVisibility(View.VISIBLE);
+                    layoutOffline.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onPlayerError(ExoPlaybackException error) {
-                String errorMessage = "%s went wrong!";
-
-                switch (error.type) {
-                    case ExoPlaybackException.TYPE_SOURCE:
-                        errorMessage = String.format(errorMessage, "Source");
-                        Log.e("Player", "TYPE_SOURCE: " + error.getSourceException().getMessage());
-                        break;
-
-                    case ExoPlaybackException.TYPE_RENDERER:
-                        errorMessage = String.format(errorMessage, "Renderer");
-                        Log.e("Player", "TYPE_RENDERER: " + error.getRendererException().getMessage());
-                        break;
-
-                    case ExoPlaybackException.TYPE_UNEXPECTED:
-                        errorMessage = String.format(errorMessage, "Something");
-                        Log.e("Player", "TYPE_UNEXPECTED: " + error.getUnexpectedException().getMessage());
-                        break;
+                Log.e("Player", "Player error or Stream cannot be accessed...");
+                if (error.type != ExoPlaybackException.TYPE_SOURCE) {
+                    Log.d("Player", "AutoRetry...");
+                    player.retry();
                 }
-
-                Notification.Toast(errorMessage);
+                else {
+                    bicPicture.setVisibility(View.VISIBLE);
+                    layoutOffline.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -175,5 +189,12 @@ public class PlayerActivity extends AppCompatActivity {
 
         layoutMenu.setVisibility(
                 layoutMenu.getVisibility() == View.VISIBLE ?  View.INVISIBLE : View.VISIBLE);
+    }
+
+    public void onRetryClick(View v) {
+        Log.d("Player", "Retry...");
+
+        player.retry();
+        layoutOffline.setVisibility(View.INVISIBLE);
     }
 }

@@ -10,7 +10,7 @@
         android:id="@+id/pv_player"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/cardview_dark_background"
+        android:background="@color/color_dark"
         android:keepScreenOn="true"
         app:use_controller="false">
 
@@ -18,8 +18,57 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:onClick="onLayoutMenuClick"
+                android:background="@null"/>
+
+            <ImageView
+                android:id="@+id/iv_big_picture"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:background="@null"
+                android:scaleType="centerCrop"
+                android:visibility="invisible" />
+
+            <LinearLayout
+                android:id="@+id/layout_offline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:onClick="onRetryClick">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SHOW IS OVER"
+                    android:textColor="@color/text_light"
+                    android:shadowColor="@color/text_shadow"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="2"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tap to Retry"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_light"
+                    android:shadowColor="@color/text_shadow"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="2"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
             <RelativeLayout
-                android:id="@+id/layoutmenu"
+                android:id="@+id/layout_menu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp">
@@ -31,7 +80,7 @@
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_no_image"
                     app:civ_border_width="2dp"
-                    app:civ_border_color="@color/cardview_dark_background"/>
+                    app:civ_border_color="@color/color_dark"/>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -45,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        app:cardBackgroundColor="@color/cardview_dark_background"
+                        app:cardBackgroundColor="@color/color_dark"
                         app:cardCornerRadius="5dp"
                         app:cardElevation="5dp"
                         android:onClick="onShareClick">
@@ -63,7 +112,7 @@
                             android:maxWidth="@dimen/player_width_card_nickname"
                             android:singleLine="true"
                             android:textAlignment="center"
-                            android:textColor="@color/cardview_light_background"
+                            android:textColor="@color/text_light"
                             android:textSize="12sp" />
 
                     </android.support.v7.widget.CardView>
@@ -93,13 +142,6 @@
                     android:src="@drawable/ic_action_unfavorite" />
 
             </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/layoutmenu"
-                android:onClick="onLayoutMenuClick"
-                android:background="@null"/>
 
         </RelativeLayout>
 
