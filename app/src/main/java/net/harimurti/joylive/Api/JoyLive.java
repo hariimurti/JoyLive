@@ -23,6 +23,9 @@ import okhttp3.ResponseBody;
 
 public class JoyLive {
     private static final String TAG = "API";
+    private static final String Host = "m.joylive.tv";
+    private static final String Website = "http://" + Host;
+    private static final String UserAgent = "Mozilla/5.0 (Linux; Android 8.0.0; Pixel) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.80 Mobile Safari/537.36";
     private static int currentPage = 0;
     private static boolean working = false;
 
@@ -49,18 +52,18 @@ public class JoyLive {
                 .add("page", sPage)
                 .build();
         Request request = new Request.Builder()
-                .url("http://m.joylive.tv/index/getRoomInfo")
+                .url(Website + "/index/getRoomInfo")
                 .post(body)
-                .addHeader("Host","m.joylive.tv")
+                .addHeader("Host", Host)
                 .addHeader("Connection","keep-alive")
-                .addHeader("Accept","application/json")
-                .addHeader("Origin","http://m.joylive.tv")
-                .addHeader("X-Requested-With","XMLHttpRequest")
-                .addHeader("JoyUser-Agent","Mozilla/5.0 (Linux; Android 8.0.0; Pixel) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.80 Mobile Safari/537.36")
-                .addHeader("Content-Type","application/x-www-form-urlencoded")
-                .addHeader("Referer","http://m.joylive.tv/")
-                .addHeader("Accept-Encoding","gzip, deflate")
-                .addHeader("Accept-Language","en,id;q=0.9")
+                .addHeader("Accept", "application/json")
+                .addHeader("Origin", Website)
+                .addHeader("X-Requested-With", "XMLHttpRequest")
+                .addHeader("User-Agent", UserAgent)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .addHeader("Referer", Website + "/")
+                .addHeader("Accept-Encoding", "gzip, deflate")
+                .addHeader("Accept-Language", "en,id;q=0.9")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
