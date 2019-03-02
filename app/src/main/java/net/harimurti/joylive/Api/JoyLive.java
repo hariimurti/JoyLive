@@ -24,8 +24,8 @@ import okhttp3.ResponseBody;
 public class JoyLive {
     private static final String TAG = "API";
     private static final String Host = "m.joylive.tv";
-    private static final String Website = "http://" + Host;
-    private static final String UserAgent = "Mozilla/5.0 (Linux; Android 8.0.0; Pixel) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.80 Mobile Safari/537.36";
+    public static final String Website = "http://" + Host;
+    public static final String UserAgent = "Mozilla/5.0 (Linux; Android 8.0.0; Pixel) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.80 Mobile Safari/537.36";
     private static int currentPage = 0;
     private static boolean working = false;
 
