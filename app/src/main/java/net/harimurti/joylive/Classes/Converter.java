@@ -1,5 +1,6 @@
 package net.harimurti.joylive.Classes;
 
+import net.harimurti.joylive.Api.JoyLive;
 import net.harimurti.joylive.Api.JoyUser;
 
 import java.text.SimpleDateFormat;
@@ -28,6 +29,18 @@ public class Converter {
 
         if (m.find())
             return "http://" + m.group(1) + "/playlist.m3u8";
+        else
+            return link;
+    }
+
+    public static String LinkToWebpage(String link) {
+        String pattern = "(/\\d+)/?";
+
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(link);
+
+        if (m.find())
+            return JoyLive.Website + m.group(1);
         else
             return link;
     }
