@@ -94,8 +94,16 @@ public class JoyUser {
         return this.nickname;
     }
 
+    public void  setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public String getProfilePic() {
         return this.headPic;
+    }
+
+    public void setProfilepic(String profilepic) {
+        this.headPic = profilepic;
     }
 
     public String getViewerHumanReadable() {
