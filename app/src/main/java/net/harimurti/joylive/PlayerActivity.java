@@ -1,5 +1,6 @@
 package net.harimurti.joylive;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -25,19 +25,31 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 
+import net.harimurti.joylive.Api.JoyLive;
 import net.harimurti.joylive.Classes.Converter;
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Api.JoyUser;
 import net.harimurti.joylive.Classes.Preferences;
 import net.harimurti.joylive.Classes.Share;
 
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class PlayerActivity extends AppCompatActivity {
+    private Activity activity;
     private Preferences pref;
     private SimpleExoPlayer player;
     private RelativeLayout layoutMenu;
     private LinearLayout layoutOffline;
+    private TextView bicNickname;
     private ImageView bicPicture;
     private ImageButton favorite;
     private JoyUser user;
@@ -47,10 +59,12 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+        this.activity = this;
 
         pref = new Preferences();
         layoutMenu = findViewById(R.id.layout_menu);
         layoutOffline = findViewById(R.id.layout_offline);
+        bicNickname = findViewById(R.id.tv_big_nickname);
         bicPicture = findViewById(R.id.iv_big_picture);
 
         Intent intent = getIntent();
@@ -80,6 +94,7 @@ public class PlayerActivity extends AppCompatActivity {
 
             TextView tvNickname = findViewById(R.id.tv_nickname);
             tvNickname.setText(user.getNickname());
+            bicNickname.setVisibility(View.GONE);
 
             CircleImageView image = findViewById(R.id.iv_picture);
             Picasso.get()
@@ -96,8 +111,8 @@ public class PlayerActivity extends AppCompatActivity {
             favorite.setImageResource(pref.isFavorite(user) ? R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
         }
         else {
-            Notification.Toast("Opening Stream");
-            bicPicture.setVisibility(View.INVISIBLE);
+            Notification.Toast("Opening Stream from External Link");
+            GetUserInfo(user.getLinkStream());
         }
 
         player = ExoPlayerFactory.newSimpleInstance(this);
@@ -195,5 +210,55 @@ public class PlayerActivity extends AppCompatActivity {
 
         player.retry();
         layoutOffline.setVisibility(View.INVISIBLE);
+    }
+
+    private void GetUserInfo (String link) {
+        String website = Converter.LinkToWebpage(link);
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(website)
+                .addHeader("User-Agent", JoyLive.UserAgent)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("GetUserInfo", e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (!response.isSuccessful()) {
+                    Log.e("GetUserInfo","Unexpected code " + response);
+                    return;
+                }
+
+                try {
+                    String body = response.body().string();
+                    String pattern = "<img src=\"(.*)\" class=\"avatar fl\">[\\s\\S]+class=\"nickname\">(.*)</p>";
+
+                    Pattern r = Pattern.compile(pattern);
+                    Matcher m = r.matcher(body);
+
+                    if (m.find()) {
+                        user.setProfilepic(m.group(1));
+                        user.setNickname(m.group(2));
+
+                        activity.runOnUiThread(new Runnable() {
+                            public void run() {
+                                bicNickname.setText(user.getNickname());
+                                Picasso.get()
+                                        .load(user.getProfilePic())
+                                        .error(R.drawable.ic_no_image)
+                                        .into(bicPicture);
+                            }
+                        });
+                    }
+                }
+                catch (Exception ex) {
+                    Log.e("GetUserInfo",ex.getMessage());
+                }
+            }
+        });
     }
 }

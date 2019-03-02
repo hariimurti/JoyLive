@@ -42,9 +42,25 @@
                 android:onClick="onRetryClick">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_big_nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:shadowColor="@color/text_shadow"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="2"
+                    android:text="Unknown User"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_light"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="SHOW IS OVER"
+                    android:textAlignment="center"
                     android:textColor="@color/text_light"
                     android:shadowColor="@color/text_shadow"
                     android:shadowDx="2"
