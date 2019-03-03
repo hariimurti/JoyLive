@@ -6,6 +6,8 @@ import android.os.Build;
 
 public class App extends Application {
     private static Context context;
+    public static final String GogoLiveVersion = "2.7.6";
+    public static final String GogoLiveAgent = "Gogo.Live " + GogoLiveVersion;
 
     public void onCreate() {
         super.onCreate();
