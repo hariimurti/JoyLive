@@ -3,8 +3,7 @@ package net.harimurti.joylive.Classes;
 import android.content.Context;
 import android.content.Intent;
 
-import net.harimurti.joylive.Api.JoyUser;
-import net.harimurti.joylive.App;
+import net.harimurti.joylive.JsonClass.JoyUser;
 
 import java.util.Locale;
 

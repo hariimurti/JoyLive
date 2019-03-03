@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
 
-import net.harimurti.joylive.Api.JoyUser;
+import net.harimurti.joylive.JsonClass.JoyUser;
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Classes.Preferences;
 

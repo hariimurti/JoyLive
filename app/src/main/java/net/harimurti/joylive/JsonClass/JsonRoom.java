@@ -1,9 +1,9 @@
-package net.harimurti.joylive.Api;
+package net.harimurti.joylive.JsonClass;
 
-public class JsonUser {
+public class JsonRoom {
     private int errno;
     private String msg;
-    private JoyUser data;
+    private JoyData data;
 
     public int getErrorNumber() {
         return this.errno;
@@ -13,7 +13,7 @@ public class JsonUser {
         return this.msg;
     }
 
-    public JoyUser getData() {
+    public JoyData getData() {
         return this.data;
     }
 }

@@ -6,12 +6,11 @@ import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 
-import net.harimurti.joylive.Api.JoyUser;
+import net.harimurti.joylive.JsonClass.JoyUser;
 import net.harimurti.joylive.App;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Preferences {

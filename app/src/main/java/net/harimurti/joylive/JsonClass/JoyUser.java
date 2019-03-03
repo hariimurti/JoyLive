@@ -1,4 +1,4 @@
-package net.harimurti.joylive.Api;
+package net.harimurti.joylive.JsonClass;
 
 import net.harimurti.joylive.Classes.Converter;
 

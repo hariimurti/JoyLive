@@ -1,6 +1,6 @@
 package net.harimurti.joylive.Classes;
 
-import net.harimurti.joylive.Api.JoyUser;
+import net.harimurti.joylive.JsonClass.JoyUser;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -26,10 +26,10 @@ import com.google.android.exoplayer2.util.Util;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import net.harimurti.joylive.Api.JsonUser;
+import net.harimurti.joylive.JsonClass.JsonUser;
 import net.harimurti.joylive.Classes.Converter;
 import net.harimurti.joylive.Classes.Notification;
-import net.harimurti.joylive.Api.JoyUser;
+import net.harimurti.joylive.JsonClass.JoyUser;
 import net.harimurti.joylive.Classes.Preferences;
 import net.harimurti.joylive.Classes.Share;
 

@@ -14,10 +14,10 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 
-import net.harimurti.joylive.Api.JsonRoom;
+import net.harimurti.joylive.JsonClass.JsonRoom;
 import net.harimurti.joylive.Classes.Menu;
 import net.harimurti.joylive.Classes.Notification;
-import net.harimurti.joylive.Api.JoyUser;
+import net.harimurti.joylive.JsonClass.JoyUser;
 
 import java.io.IOException;
 import java.util.ArrayList;

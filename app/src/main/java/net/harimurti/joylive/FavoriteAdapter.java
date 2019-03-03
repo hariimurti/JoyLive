@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import net.harimurti.joylive.Api.JoyUser;
+import net.harimurti.joylive.JsonClass.JoyUser;
 import net.harimurti.joylive.Classes.Checker;
 import net.harimurti.joylive.Classes.Preferences;
 
