@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
@@ -53,6 +54,7 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView bicNickname;
     private ImageView bicPicture;
     private ImageButton favorite;
+    private SpinKitView spinKit;
     private User user;
     private boolean openFromExternal;
 
@@ -68,6 +70,7 @@ public class PlayerActivity extends AppCompatActivity {
         favorite = findViewById(R.id.ib_favorite);
         bicNickname = findViewById(R.id.tv_big_nickname);
         bicPicture = findViewById(R.id.iv_big_picture);
+        spinKit = findViewById(R.id.spin_kit);
 
         Intent intent = getIntent();
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
@@ -132,6 +135,14 @@ public class PlayerActivity extends AppCompatActivity {
                     }
                 }
 
+                if (playbackState == Player.STATE_BUFFERING) {
+                    spinKit.setVisibility(View.VISIBLE);
+                }
+
+                if (playbackState == Player.STATE_READY) {
+                    spinKit.setVisibility(View.GONE);
+                }
+
                 if (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING) {
                     bicPicture.setVisibility(View.INVISIBLE);
                     layoutOffline.setVisibility(View.INVISIBLE);
@@ -140,6 +151,7 @@ public class PlayerActivity extends AppCompatActivity {
                 if (playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED) {
                     bicPicture.setVisibility(View.VISIBLE);
                     layoutOffline.setVisibility(View.VISIBLE);
+                    spinKit.setVisibility(View.GONE);
                 }
             }
 
