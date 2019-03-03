@@ -1,28 +1,38 @@
 package net.harimurti.joylive;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Handler;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
-import net.harimurti.joylive.Api.JoyLive;
+import com.google.gson.Gson;
+
+import net.harimurti.joylive.Api.JsonRoom;
 import net.harimurti.joylive.Classes.Menu;
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Api.JoyUser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
+public class MainActivity extends AppCompatActivity {
+    private Activity activity;
     private boolean doubleBackToExitPressedOnce;
     private SwipeRefreshLayout swipeRefresh;
     private static ArrayList<JoyUser> listUser = new ArrayList<>();
@@ -34,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle(R.string.app_title);
 
+        activity = this;
         mainAdapter = new MainAdapter(this, listUser);
         final ListView listView = findViewById(R.id.list_content);
         listView.setAdapter(mainAdapter);
@@ -50,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                         listView.getFooterViewsCount()) >= (mainAdapter.getCount() - 1)) {
 
                     //listView has hit the bottom
-                    JoyLive.GetMoreUsers();
+                    GetNextRooms();
                 }
             }
         });
@@ -64,16 +75,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 listUser.clear();
-                JoyLive.GetUsers(1);
+                GetRooms(1);
+                swipeRefresh.setRefreshing(false);
             }
         });
 
-        IntentFilter filter = new IntentFilter("RefreshAdapter");
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(RefreshReceiver, filter);
-
         //load users for first time
-        JoyLive.GetUsers(1);
+        GetRooms(1);
     }
 
     @Override
@@ -126,19 +134,97 @@ public class MainActivity extends AppCompatActivity {
         }, 2000);
     }
 
-    public static boolean AddUser(JoyUser user) {
-        if (!JoyUser.isContainInList(listUser, user)) {
-            listUser.add(user);
-            return true;
-        }
-        return false;
+    private int currentPage = 0;
+    private boolean isWorking = false;
+    private void GetRooms(int page) {
+        if (isWorking) return;
+        if (page == 0) page = 1;
+
+        isWorking = true;
+        currentPage = page;
+
+        String sPage = Integer.toString(page);
+        Notification.Toast("Loading page " + sPage + " ...");
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("page", sPage)
+                .build();
+        Request request = new Request.Builder()
+                .url("http://m.joylive.tv/index/getRoomInfo")
+                .post(body)
+                .addHeader("Host", "m.joylive.tv")
+                .addHeader("Connection","keep-alive")
+                .addHeader("Accept", "application/json")
+                .addHeader("Origin", "http://m.joylive.tv")
+                .addHeader("X-Requested-With", "XMLHttpRequest")
+                .addHeader("User-Agent", App.MobileAgent)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .addHeader("Referer", "http://m.joylive.tv/")
+                .addHeader("Accept-Encoding", "gzip, deflate")
+                .addHeader("Accept-Language", "en,id;q=0.9")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                Log.e("GetRooms", e.getMessage());
+                Notification.Toast("Something went wrong! Try again later.");
+
+                isWorking = false;
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                try {
+                    ResponseBody responseBody = response.body();
+                    if (!response.isSuccessful()) {
+                        Log.e("GetRooms","Unexpected code " + response);
+                        Notification.Toast("Unexpected code " + response);
+                        return;
+                    }
+
+                    Gson gson = new Gson();
+                    JsonRoom joyObject = gson.fromJson(responseBody.string(), JsonRoom.class);
+                    JoyUser[] users = joyObject.getData().getRooms();
+
+                    int count = 0;
+                    for (JoyUser user: users) {
+                        // only girls
+                        if (!user.getSex().equals("2")) continue;
+
+                        if (!JoyUser.isContainInList(listUser, user)) {
+                            listUser.add(user);
+                            count++;
+                        }
+                    }
+
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mainAdapter.notifyDataSetChanged();
+                            swipeRefresh.setRefreshing(false);
+                        }
+                    });
+
+                    Log.d("GetRooms", "Found " + Integer.toString(count) + " new girls");
+                    Notification.Toast("Found " + Integer.toString(count) + " new girls");
+                }
+                catch (IOException e) {
+                    Log.e("GetRooms", e.getMessage());
+                    Notification.Toast("Something went wrong! Try again later.");
+                }
+
+                isWorking = false;
+            }
+        });
     }
 
-    private final BroadcastReceiver RefreshReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            mainAdapter.notifyDataSetChanged();
-            swipeRefresh.setRefreshing(false);
-        }
-    };
+    private void GetNextRooms() {
+        if (isWorking) return;
+
+        currentPage++;
+        GetRooms(currentPage);
+    }
 }
