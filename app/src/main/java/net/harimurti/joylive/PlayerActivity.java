@@ -23,9 +23,10 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import net.harimurti.joylive.Api.JoyLive;
+import net.harimurti.joylive.Api.JsonUser;
 import net.harimurti.joylive.Classes.Converter;
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Api.JoyUser;
@@ -33,14 +34,14 @@ import net.harimurti.joylive.Classes.Preferences;
 import net.harimurti.joylive.Classes.Share;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class PlayerActivity extends AppCompatActivity {
@@ -64,6 +65,7 @@ public class PlayerActivity extends AppCompatActivity {
         pref = new Preferences();
         layoutMenu = findViewById(R.id.layout_menu);
         layoutOffline = findViewById(R.id.layout_offline);
+        favorite = findViewById(R.id.ib_favorite);
         bicNickname = findViewById(R.id.tv_big_nickname);
         bicPicture = findViewById(R.id.iv_big_picture);
 
@@ -87,11 +89,7 @@ public class PlayerActivity extends AppCompatActivity {
             user.setPlayStartTimeNow();
         }
 
-        layoutMenu.setVisibility(openFromExternal ? View.INVISIBLE : View.VISIBLE);
-
         if (!openFromExternal) {
-            Notification.Toast("Opening Stream : " + user.getNickname());
-
             TextView tvNickname = findViewById(R.id.tv_nickname);
             tvNickname.setText(user.getNickname());
             bicNickname.setVisibility(View.GONE);
@@ -102,18 +100,14 @@ public class PlayerActivity extends AppCompatActivity {
                     .error(R.drawable.ic_no_image)
                     .into(image);
 
-            Picasso.get()
-                    .load(user.getProfilePic())
-                    .error(R.drawable.ic_no_image)
-                    .into(bicPicture);
-
-            favorite = findViewById(R.id.ib_favorite);
             favorite.setImageResource(pref.isFavorite(user) ? R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
         }
         else {
+            layoutMenu.setVisibility(View.GONE);
             Notification.Toast("Opening Stream from External Link");
-            GetUserInfo(user.getLinkStream());
         }
+
+        GetUserInfo(user.getId());
 
         player = ExoPlayerFactory.newSimpleInstance(this);
 
@@ -212,12 +206,23 @@ public class PlayerActivity extends AppCompatActivity {
         layoutOffline.setVisibility(View.INVISIBLE);
     }
 
-    private void GetUserInfo (String link) {
-        String website = Converter.LinkToWebpage(link);
+    private void GetUserInfo (String id) {
         OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("androidVersion", App.AndroidVersion)
+                .add("packageId", "3")
+                .add("channel", "developer-default")
+                .add("version", App.GogoLiveVersion)
+                .add("deviceName", App.DeviceName)
+                .add("platform", "android")
+                .build();
         Request request = new Request.Builder()
-                .url(website)
-                .addHeader("User-Agent", JoyLive.UserAgent)
+                .url("http://app.joylive.tv/user/GetUserInfo?uid=" + id)
+                .post(body)
+                .addHeader("Host", "app.joylive.tv")
+                .addHeader("User-Agent", App.GogoLiveAgent)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .addHeader("Connection","keep-alive")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -235,25 +240,24 @@ public class PlayerActivity extends AppCompatActivity {
 
                 try {
                     String body = response.body().string();
-                    String pattern = "<img src=\"(.*)\" class=\"avatar fl\">[\\s\\S]+class=\"nickname\">(.*)</p>";
+                    Gson gson = new Gson();
+                    JsonUser jsonObject = gson.fromJson(body, JsonUser.class);
+                    JoyUser data = jsonObject.getData();
 
-                    Pattern r = Pattern.compile(pattern);
-                    Matcher m = r.matcher(body);
+                    user.setNickname(data.getNickname());
+                    user.setProfilepic(data.getProfilePic());
 
-                    if (m.find()) {
-                        user.setProfilepic(m.group(1));
-                        user.setNickname(m.group(2));
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            bicNickname.setText(data.getNickname());
+                            Picasso.get()
+                                    .load(data.getBackgroundImage())
+                                    .error(R.drawable.ic_no_image)
+                                    .into(bicPicture);
+                        }
+                    });
 
-                        activity.runOnUiThread(new Runnable() {
-                            public void run() {
-                                bicNickname.setText(user.getNickname());
-                                Picasso.get()
-                                        .load(user.getProfilePic())
-                                        .error(R.drawable.ic_no_image)
-                                        .into(bicPicture);
-                            }
-                        });
-                    }
                 }
                 catch (Exception ex) {
                     Log.e("GetUserInfo",ex.getMessage());
