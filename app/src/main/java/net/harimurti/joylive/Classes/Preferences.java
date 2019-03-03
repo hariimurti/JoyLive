@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 
-import net.harimurti.joylive.JsonClass.JoyUser;
+import net.harimurti.joylive.JsonClass.User;
 import net.harimurti.joylive.App;
 
 import java.util.ArrayList;
@@ -56,55 +56,55 @@ public class Preferences {
         prefEditor.apply();
     }
 
-    public ArrayList<JoyUser> getFavorite() {
+    public ArrayList<User> getFavorite() {
         String json = getString(FAVORITE_LIST);
         if (json.isEmpty())
             return new ArrayList<>();
 
         Gson gson = new Gson();
-        JoyUser[] joyUsers = gson.fromJson(json, JoyUser[].class);
-        List<JoyUser> users = Arrays.asList(joyUsers);
+        User[] joyUsers = gson.fromJson(json, User[].class);
+        List<User> users = Arrays.asList(joyUsers);
         return new ArrayList<>(users);
     }
 
-    public void setFavorite(ArrayList<JoyUser> list) {
+    public void setFavorite(ArrayList<User> list) {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         setString(FAVORITE_LIST, json);
     }
 
-    public boolean isFavorite(JoyUser user) {
-        ArrayList<JoyUser> list = getFavorite();
-        return JoyUser.isContainInList(list, user);
+    public boolean isFavorite(User user) {
+        ArrayList<User> list = getFavorite();
+        return User.isContainInList(list, user);
     }
 
-    public boolean addFavorite(JoyUser user) {
+    public boolean addFavorite(User user) {
         if (isFavorite(user))
             return false;
 
-        ArrayList<JoyUser> list = getFavorite();
+        ArrayList<User> list = getFavorite();
         list.add(user);
         setFavorite(list);
         return true;
     }
 
-    public void addOrUpdateFavorite(JoyUser user) {
+    public void addOrUpdateFavorite(User user) {
         if (!isFavorite(user)) {
             addFavorite(user);
             return;
         }
 
-        ArrayList<JoyUser> list = getFavorite();
-        ArrayList<JoyUser> newList = JoyUser.updateFromList(list, user);
+        ArrayList<User> list = getFavorite();
+        ArrayList<User> newList = User.updateFromList(list, user);
         setFavorite(newList);
     }
 
-    public boolean remFavorite(JoyUser user) {
+    public boolean remFavorite(User user) {
         if (!isFavorite(user))
             return false;
 
-        ArrayList<JoyUser> list = getFavorite();
-        ArrayList<JoyUser> newList = JoyUser.removeFromList(list, user);
+        ArrayList<User> list = getFavorite();
+        ArrayList<User> newList = User.removeFromList(list, user);
         setFavorite(newList);
         return true;
     }

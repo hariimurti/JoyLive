@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import net.harimurti.joylive.JsonClass.JsonRoom;
 import net.harimurti.joylive.Classes.Menu;
 import net.harimurti.joylive.Classes.Notification;
-import net.harimurti.joylive.JsonClass.JoyUser;
+import net.harimurti.joylive.JsonClass.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private Activity activity;
     private boolean doubleBackToExitPressedOnce;
     private SwipeRefreshLayout swipeRefresh;
-    private static ArrayList<JoyUser> listUser = new ArrayList<>();
+    private static ArrayList<User> listUser = new ArrayList<>();
     private static MainAdapter mainAdapter;
 
     @Override
@@ -187,14 +187,14 @@ public class MainActivity extends AppCompatActivity {
 
                     Gson gson = new Gson();
                     JsonRoom joyObject = gson.fromJson(responseBody.string(), JsonRoom.class);
-                    JoyUser[] users = joyObject.getData().getRooms();
+                    User[] users = joyObject.getData().getRooms();
 
                     int count = 0;
-                    for (JoyUser user: users) {
+                    for (User user: users) {
                         // only girls
                         if (!user.getSex().equals("2")) continue;
 
-                        if (!JoyUser.isContainInList(listUser, user)) {
+                        if (!User.isContainInList(listUser, user)) {
                             listUser.add(user);
                             count++;
                         }

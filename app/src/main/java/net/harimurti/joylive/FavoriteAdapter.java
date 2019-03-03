@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import net.harimurti.joylive.JsonClass.JoyUser;
+import net.harimurti.joylive.JsonClass.User;
 import net.harimurti.joylive.Classes.Checker;
 import net.harimurti.joylive.Classes.Preferences;
 
@@ -22,9 +22,9 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FavoriteAdapter extends ArrayAdapter<JoyUser> {
+public class FavoriteAdapter extends ArrayAdapter<User> {
     private Context context;
-    private ArrayList<JoyUser> dataSet;
+    private ArrayList<User> dataSet;
 
     private class ViewHolder {
         CircleImageView image;
@@ -44,7 +44,7 @@ public class FavoriteAdapter extends ArrayAdapter<JoyUser> {
         }
     }
 
-    public FavoriteAdapter(Context context, ArrayList<JoyUser> dataSet) {
+    public FavoriteAdapter(Context context, ArrayList<User> dataSet) {
         super(context, R.layout.main_content, dataSet);
         this.context = context;
         this.dataSet = dataSet;
@@ -52,7 +52,7 @@ public class FavoriteAdapter extends ArrayAdapter<JoyUser> {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final JoyUser user = getItem(position);
+        final User user = getItem(position);
         ViewHolder viewHolder;
 
         if (convertView == null) {
@@ -82,11 +82,11 @@ public class FavoriteAdapter extends ArrayAdapter<JoyUser> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, PlayerActivity.class);
-                intent.putExtra(JoyUser.ID, user.getId());
-                intent.putExtra(JoyUser.NICKNAME, user.getNickname());
-                intent.putExtra(JoyUser.PROFILEPIC, user.getProfilePic());
-                intent.putExtra(JoyUser.ANNOUNCEMENT, user.getAnnouncement());
-                intent.putExtra(JoyUser.LINKSTREAM, user.getLinkStream());
+                intent.putExtra(User.ID, user.getId());
+                intent.putExtra(User.NICKNAME, user.getNickname());
+                intent.putExtra(User.PROFILEPIC, user.getProfilePic());
+                intent.putExtra(User.ANNOUNCEMENT, user.getAnnouncement());
+                intent.putExtra(User.LINKSTREAM, user.getLinkStream());
                 context.startActivity(intent);
             }
         });
@@ -100,7 +100,7 @@ public class FavoriteAdapter extends ArrayAdapter<JoyUser> {
         return convertView;
     }
 
-    private void showDetailedUser(ViewGroup parent, JoyUser user) {
+    private void showDetailedUser(ViewGroup parent, User user) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         View dialogView = LayoutInflater.from(getContext())
                 .inflate(R.layout.dialog_favorite, parent, false);

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import static java.lang.System.currentTimeMillis;
 
-public class JoyUser {
+public class User {
     public static final String ID = "mid";
     public static final String NICKNAME = "nickname";
     public static final String PROFILEPIC = "headPic";
@@ -27,7 +27,7 @@ public class JoyUser {
     private String videoPlayUrl;
     private int price;
 
-    public JoyUser(String id, String nickname, String profilePic, String announcement, String linkStream) {
+    public User(String id, String nickname, String profilePic, String announcement, String linkStream) {
         this.id = id;
         this.mid = id;
         this.nickname = nickname;
@@ -36,19 +36,19 @@ public class JoyUser {
         this.videoPlayUrl = linkStream;
     }
 
-    public static boolean isContainInList(ArrayList<JoyUser> list, JoyUser o) {
+    public static boolean isContainInList(ArrayList<User> list, User o) {
         String id = o.getId();
-        for (JoyUser x : list) {
+        for (User x : list) {
             if (x.getId().equals(id))
                 return true;
         }
         return false;
     }
 
-    public static ArrayList<JoyUser> updateFromList(ArrayList<JoyUser> list, JoyUser o) {
-        ArrayList<JoyUser> tempList = new ArrayList<>();
+    public static ArrayList<User> updateFromList(ArrayList<User> list, User o) {
+        ArrayList<User> tempList = new ArrayList<>();
         String id = o.getId();
-        for (JoyUser x : list) {
+        for (User x : list) {
             if (x.getId().equals(id))
                 tempList.add(o);
             else
@@ -57,10 +57,10 @@ public class JoyUser {
         return tempList;
     }
 
-    public static ArrayList<JoyUser> removeFromList(ArrayList<JoyUser> list, JoyUser o) {
-        ArrayList<JoyUser> tempList = new ArrayList<>();
+    public static ArrayList<User> removeFromList(ArrayList<User> list, User o) {
+        ArrayList<User> tempList = new ArrayList<>();
         String id = o.getId();
-        for (JoyUser x : list) {
+        for (User x : list) {
             if (x.getId().equals(id))
                 continue;
 

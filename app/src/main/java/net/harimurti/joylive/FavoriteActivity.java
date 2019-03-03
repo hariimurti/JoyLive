@@ -5,14 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
 
-import net.harimurti.joylive.JsonClass.JoyUser;
+import net.harimurti.joylive.JsonClass.User;
 import net.harimurti.joylive.Classes.Notification;
 import net.harimurti.joylive.Classes.Preferences;
 
 import java.util.ArrayList;
 
 public class FavoriteActivity extends AppCompatActivity {
-    private ArrayList<JoyUser> listUser = new ArrayList<>();
+    private ArrayList<User> listUser = new ArrayList<>();
     private FavoriteAdapter favoriteAdapter;
     private SwipeRefreshLayout swipeRefresh;
     private Preferences pref;
@@ -51,7 +51,7 @@ public class FavoriteActivity extends AppCompatActivity {
     }
 
     private void RefreshList(boolean force) {
-        ArrayList<JoyUser> listFav = pref.getFavorite();
+        ArrayList<User> listFav = pref.getFavorite();
 
         listUser.clear();
         if (!listFav.isEmpty()) {

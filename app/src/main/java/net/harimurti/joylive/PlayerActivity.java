@@ -29,7 +29,7 @@ import com.squareup.picasso.Picasso;
 import net.harimurti.joylive.JsonClass.JsonUser;
 import net.harimurti.joylive.Classes.Converter;
 import net.harimurti.joylive.Classes.Notification;
-import net.harimurti.joylive.JsonClass.JoyUser;
+import net.harimurti.joylive.JsonClass.User;
 import net.harimurti.joylive.Classes.Preferences;
 import net.harimurti.joylive.Classes.Share;
 
@@ -53,7 +53,7 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView bicNickname;
     private ImageView bicPicture;
     private ImageButton favorite;
-    private JoyUser user;
+    private User user;
     private boolean openFromExternal;
 
     @Override
@@ -79,13 +79,13 @@ public class PlayerActivity extends AppCompatActivity {
         }
         else {
             Bundle bundle = getIntent().getExtras();
-            String id = bundle.getString(JoyUser.ID);
-            String profilePic = bundle.getString(JoyUser.PROFILEPIC);
-            String nickname = bundle.getString(JoyUser.NICKNAME);
-            String announcement = bundle.getString(JoyUser.ANNOUNCEMENT);
-            String linkStream = bundle.getString(JoyUser.LINKSTREAM);
+            String id = bundle.getString(User.ID);
+            String profilePic = bundle.getString(User.PROFILEPIC);
+            String nickname = bundle.getString(User.NICKNAME);
+            String announcement = bundle.getString(User.ANNOUNCEMENT);
+            String linkStream = bundle.getString(User.LINKSTREAM);
 
-            user = new JoyUser(id, nickname, profilePic, announcement, linkStream);
+            user = new User(id, nickname, profilePic, announcement, linkStream);
             user.setPlayStartTimeNow();
         }
 
@@ -242,7 +242,7 @@ public class PlayerActivity extends AppCompatActivity {
                     String body = response.body().string();
                     Gson gson = new Gson();
                     JsonUser jsonObject = gson.fromJson(body, JsonUser.class);
-                    JoyUser data = jsonObject.getData();
+                    User data = jsonObject.getData();
 
                     user.setNickname(data.getNickname());
                     user.setProfilepic(data.getProfilePic());

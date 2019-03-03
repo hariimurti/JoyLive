@@ -3,7 +3,7 @@ package net.harimurti.joylive.JsonClass;
 public class JsonRoom {
     private int errno;
     private String msg;
-    private JoyData data;
+    private Rooms data;
 
     public int getErrorNumber() {
         return this.errno;
@@ -13,7 +13,7 @@ public class JsonRoom {
         return this.msg;
     }
 
-    public JoyData getData() {
+    public Rooms getData() {
         return this.data;
     }
 }
