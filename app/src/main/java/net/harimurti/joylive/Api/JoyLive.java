@@ -87,7 +87,7 @@ public class JoyLive {
                     }
 
                     Gson gson = new Gson();
-                    JoyJson joyObject = gson.fromJson(responseBody.string(), JoyJson.class);
+                    JsonRoom joyObject = gson.fromJson(responseBody.string(), JsonRoom.class);
                     JoyUser[] users = joyObject.getData().getRooms();
 
                     int count = 0;

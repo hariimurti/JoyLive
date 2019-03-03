@@ -3,7 +3,6 @@ package net.harimurti.joylive.Api;
 import net.harimurti.joylive.Classes.Converter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static java.lang.System.currentTimeMillis;
 
@@ -16,16 +15,20 @@ public class JoyUser {
 
     private long playStartTime;
     private String sex;
+    private String id;
     private String mid;
     private String nickname;
     private String headPic;
+    private String bgImg;
     private long onlineNum;
     private String fansNum;
     private String announcement;
+    private boolean isPlaying;
     private String videoPlayUrl;
     private int price;
 
     public JoyUser(String id, String nickname, String profilePic, String announcement, String linkStream) {
+        this.id = id;
         this.mid = id;
         this.nickname = nickname;
         this.headPic = profilePic;
@@ -87,7 +90,7 @@ public class JoyUser {
     }
 
     public String getId() {
-        return this.mid;
+        return this.mid.isEmpty() ? this.id : this.mid;
     }
 
     public String getNickname() {
@@ -104,6 +107,10 @@ public class JoyUser {
 
     public void setProfilepic(String profilepic) {
         this.headPic = profilepic;
+    }
+
+    public String getBackgroundImage() {
+        return this.bgImg;
     }
 
     public String getViewerHumanReadable() {
@@ -127,6 +134,10 @@ public class JoyUser {
 
     public int getPrice() {
         return this.price;
+    }
+
+    public boolean isPlaying() {
+        return this.isPlaying;
     }
 
     public String getLinkStream() {
