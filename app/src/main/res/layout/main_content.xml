@@ -44,8 +44,7 @@
             android:gravity="top"
             android:singleLine="true"
             android:textAlignment="gravity"
-            android:textSize="12sp"
-            android:textStyle="italic" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -87,8 +86,7 @@
                 android:minWidth="10dp"
                 android:singleLine="true"
                 android:textAlignment="center"
-                android:textSize="10sp"
-                android:textStyle="italic" />
+                android:textSize="10sp" />
 
         </android.support.v7.widget.CardView>
 
