@@ -39,7 +39,7 @@ import java.io.IOException;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -220,13 +220,14 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void GetUserInfo (String id) {
         OkHttpClient client = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("androidVersion", App.AndroidVersion)
-                .add("packageId", "3")
-                .add("channel", "developer-default")
-                .add("version", App.GogoLiveVersion)
-                .add("deviceName", App.DeviceName)
-                .add("platform", "android")
+        RequestBody body = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("androidVersion", App.AndroidVersion)
+                .addFormDataPart("packageId", "3")
+                .addFormDataPart("channel", "developer-default")
+                .addFormDataPart("version", App.GogoLiveVersion)
+                .addFormDataPart("deviceName", App.DeviceName)
+                .addFormDataPart("platform", "android")
                 .build();
         Request request = new Request.Builder()
                 .url("http://app.joylive.tv/user/GetUserInfo?uid=" + id)
