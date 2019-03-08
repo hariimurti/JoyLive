@@ -187,12 +187,12 @@ public class MainActivity extends AppCompatActivity {
 
                     Gson gson = new Gson();
                     JsonRoom joyObject = gson.fromJson(responseBody.string(), JsonRoom.class);
-                    User[] users = joyObject.getData().getRooms();
+                    User[] users = joyObject.data.rooms;
 
                     int count = 0;
                     for (User user: users) {
                         // only girls
-                        if (!user.getSex().equals("2")) continue;
+                        if (!user.sex.equals("2")) continue;
 
                         if (!User.isContainInList(listUser, user)) {
                             listUser.add(user);

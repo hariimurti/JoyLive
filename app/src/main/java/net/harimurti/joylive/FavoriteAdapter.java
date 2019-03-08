@@ -27,7 +27,7 @@ public class FavoriteAdapter extends ArrayAdapter<User> {
     private ArrayList<User> dataSet;
 
     private class ViewHolder {
-        CircleImageView image;
+        CircleImageView picture;
         TextView nickname;
         TextView status;
         TextView lastseen;
@@ -35,7 +35,7 @@ public class FavoriteAdapter extends ArrayAdapter<User> {
         LinearLayout layout;
 
         public ViewHolder(View view) {
-            image = view.findViewById(R.id.iv_picture);
+            picture = view.findViewById(R.id.iv_picture);
             nickname = view.findViewById(R.id.tv_nickname);
             status = view.findViewById(R.id.tv_status);
             lastseen = view.findViewById(R.id.tv_lastseen);
@@ -65,9 +65,9 @@ public class FavoriteAdapter extends ArrayAdapter<User> {
         }
 
         Picasso.get()
-                .load(user.getProfilePic())
+                .load(user.nickname)
                 .error(R.drawable.ic_no_image)
-                .into(viewHolder.image);
+                .into(viewHolder.picture);
 
         Checker checker = new Checker();
         checker.link(user.getLinkPlaylist());
@@ -76,17 +76,17 @@ public class FavoriteAdapter extends ArrayAdapter<User> {
         checker.into(viewHolder.status);
         checker.execute();
 
-        viewHolder.nickname.setText(user.getNickname());
+        viewHolder.nickname.setText(user.nickname);
         viewHolder.lastseen.setText(user.getPlayStartTime());
         viewHolder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, PlayerActivity.class);
-                intent.putExtra(User.ID, user.getId());
-                intent.putExtra(User.NICKNAME, user.getNickname());
-                intent.putExtra(User.PROFILEPIC, user.getProfilePic());
+                intent.putExtra(User.MID, user.getId());
+                intent.putExtra(User.NICKNAME, user.nickname);
+                intent.putExtra(User.PROFILEPIC, user.headPic);
                 intent.putExtra(User.ANNOUNCEMENT, user.getAnnouncement());
-                intent.putExtra(User.LINKSTREAM, user.getLinkStream());
+                intent.putExtra(User.LINKSTREAM, user.videoPlayUrl);
                 context.startActivity(intent);
             }
         });
@@ -109,7 +109,7 @@ public class FavoriteAdapter extends ArrayAdapter<User> {
 
         CircleImageView image = dialogView.findViewById(R.id.iv_picture);
         Picasso.get()
-                .load(user.getProfilePic())
+                .load(user.headPic)
                 .error(R.drawable.ic_no_image)
                 .into(image);
 
@@ -117,7 +117,7 @@ public class FavoriteAdapter extends ArrayAdapter<User> {
         id.setText(user.getId());
 
         TextView nickname = dialogView.findViewById(R.id.tv_nickname);
-        nickname.setText(user.getNickname());
+        nickname.setText(user.nickname);
 
         TextView status = dialogView.findViewById(R.id.tv_status);
         status.setText(user.getAnnouncement());

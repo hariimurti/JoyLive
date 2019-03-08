@@ -7,25 +7,28 @@ import java.util.ArrayList;
 import static java.lang.System.currentTimeMillis;
 
 public class User {
-    public static final String ID = "mid";
+    public static final String MID = "mid";
     public static final String NICKNAME = "nickname";
     public static final String PROFILEPIC = "headPic";
     public static final String ANNOUNCEMENT = "announcement";
     public static final String LINKSTREAM = "videoPlayUrl";
 
-    private long playStartTime;
-    private String sex;
-    private String id;
-    private String mid;
-    private String nickname;
-    private String headPic;
-    private String bgImg;
-    private long onlineNum;
-    private String fansNum;
-    private String announcement;
-    private boolean isPlaying;
-    private String videoPlayUrl;
-    private int price;
+    public String announcement;
+    public String bgImg;
+    public String birthday;
+    public String fansNum;
+    public String headPic;
+    public String id;
+    public boolean isPlaying;
+    public String nickname;
+    public String mid;
+    public long onlineNum;
+    public long playStartTime;
+    public int price;
+    public String rid;
+    public String sex;
+    public String signature;
+    public String videoPlayUrl;
 
     public User(String id, String nickname, String profilePic, String announcement, String linkStream) {
         this.id = id;
@@ -69,48 +72,16 @@ public class User {
         return tempList;
     }
 
-    public long getPlayStartTimeEpoch() {
-        return this.playStartTime;
-    }
-
     public String getPlayStartTime() {
         return Converter.TimestampToHumanDate(this.playStartTime);
     }
 
-    public void setPlayStartTime(long timestamp) {
-        this.playStartTime = timestamp;
-    }
-
     public void setPlayStartTimeNow() {
-        setPlayStartTime(currentTimeMillis()/1000);
-    }
-
-    public String getSex() {
-        return this.sex;
+        this.playStartTime = currentTimeMillis()/1000;
     }
 
     public String getId() {
         return this.mid.isEmpty() ? this.id : this.mid;
-    }
-
-    public String getNickname() {
-        return this.nickname;
-    }
-
-    public void  setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getProfilePic() {
-        return this.headPic;
-    }
-
-    public void setProfilepic(String profilepic) {
-        this.headPic = profilepic;
-    }
-
-    public String getBackgroundImage() {
-        return this.bgImg;
     }
 
     public String getViewerHumanReadable() {
@@ -128,20 +99,11 @@ public class User {
         return this.announcement;
     }
 
-    public String getFansNum() {
-        return this.fansNum;
-    }
+    public String getSignature() {
+        if (this.signature.isEmpty())
+            return "Hey, come and check my show now!";
 
-    public int getPrice() {
-        return this.price;
-    }
-
-    public boolean isPlaying() {
-        return this.isPlaying;
-    }
-
-    public String getLinkStream() {
-        return this.videoPlayUrl;
+        return this.signature;
     }
 
     public String getLinkPlaylist() {

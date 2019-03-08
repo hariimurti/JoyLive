@@ -32,6 +32,18 @@ public class Converter {
             return link;
     }
 
+    public static String GetIdFromLink(String link) {
+        String pattern = "live/(\\d+)/?";
+
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(link);
+
+        if (m.find())
+            return m.group(1);
+        else
+            return "0";
+    }
+
     public static String LinkToWebpage(String link) {
         String pattern = "/(\\d+)/?";
 
@@ -45,7 +57,7 @@ public class Converter {
     }
 
     public static User LinkToUser(String link) {
-        String pattern = "^https?://(.*/(\\d+))/playlist.m3u8";
+        String pattern = "^https?://(.*live/(\\d+))/playlist.m3u8";
 
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(link);

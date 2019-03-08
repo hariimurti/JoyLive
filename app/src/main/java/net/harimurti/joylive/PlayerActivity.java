@@ -51,9 +51,11 @@ public class PlayerActivity extends AppCompatActivity {
     private SimpleExoPlayer player;
     private RelativeLayout layoutMenu;
     private LinearLayout layoutOffline;
-    private TextView bicNickname;
-    private ImageView bicPicture;
-    private ImageButton favorite;
+    private TextView txtNickname;
+    private TextView txtBigNickname;
+    private CircleImageView imgProfile;
+    private ImageView imgBackground;
+    private ImageButton btnFavorite;
     private SpinKitView spinKit;
     private User user;
     private boolean openFromExternal;
@@ -67,9 +69,11 @@ public class PlayerActivity extends AppCompatActivity {
         pref = new Preferences();
         layoutMenu = findViewById(R.id.layout_menu);
         layoutOffline = findViewById(R.id.layout_offline);
-        favorite = findViewById(R.id.ib_favorite);
-        bicNickname = findViewById(R.id.tv_big_nickname);
-        bicPicture = findViewById(R.id.iv_big_picture);
+        btnFavorite = findViewById(R.id.ib_favorite);
+        txtNickname = findViewById(R.id.tv_nickname);
+        imgProfile = findViewById(R.id.iv_picture);
+        txtBigNickname = findViewById(R.id.tv_big_nickname);
+        imgBackground = findViewById(R.id.iv_big_picture);
         spinKit = findViewById(R.id.spin_kit);
 
         Intent intent = getIntent();
@@ -81,29 +85,33 @@ public class PlayerActivity extends AppCompatActivity {
             user = Converter.LinkToUser(playlist);
         }
         else {
-            Bundle bundle = getIntent().getExtras();
-            String id = bundle.getString(User.ID);
+            Bundle bundle = intent.getExtras();
+            String id = bundle.getString(User.MID);
             String profilePic = bundle.getString(User.PROFILEPIC);
             String nickname = bundle.getString(User.NICKNAME);
             String announcement = bundle.getString(User.ANNOUNCEMENT);
             String linkStream = bundle.getString(User.LINKSTREAM);
 
             user = new User(id, nickname, profilePic, announcement, linkStream);
-            user.setPlayStartTimeNow();
         }
 
         if (!openFromExternal) {
-            TextView tvNickname = findViewById(R.id.tv_nickname);
-            tvNickname.setText(user.getNickname());
-            bicNickname.setVisibility(View.GONE);
+            txtNickname.setText(user.nickname);
+            txtBigNickname.setText(user.nickname);
 
-            CircleImageView image = findViewById(R.id.iv_picture);
             Picasso.get()
-                    .load(user.getProfilePic())
+                    .load(user.headPic)
                     .error(R.drawable.ic_no_image)
-                    .into(image);
+                    .into(imgProfile);
 
-            favorite.setImageResource(pref.isFavorite(user) ? R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
+            Picasso.get()
+                    .load(user.headPic)
+                    .error(R.drawable.ic_no_image)
+                    .into(imgBackground);
+
+            boolean isFavorite = pref.isFavorite(user);
+            btnFavorite.setImageResource(isFavorite ?
+                    R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
         }
         else {
             layoutMenu.setVisibility(View.GONE);
@@ -120,7 +128,7 @@ public class PlayerActivity extends AppCompatActivity {
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
                 Util.getUserAgent(this, "ExoPlayer2"));
         MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(Uri.parse(user.getLinkStream()));
+                .createMediaSource(Uri.parse(user.videoPlayUrl));
 
         player.prepare(videoSource);
         player.addListener(new Player.EventListener() {
@@ -140,16 +148,17 @@ public class PlayerActivity extends AppCompatActivity {
                 }
 
                 if (playbackState == Player.STATE_READY) {
+                    user.setPlayStartTimeNow();
                     spinKit.setVisibility(View.GONE);
                 }
 
                 if (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING) {
-                    bicPicture.setVisibility(View.INVISIBLE);
+                    imgBackground.setVisibility(View.INVISIBLE);
                     layoutOffline.setVisibility(View.INVISIBLE);
                 }
 
                 if (playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED) {
-                    bicPicture.setVisibility(View.VISIBLE);
+                    imgBackground.setVisibility(View.VISIBLE);
                     layoutOffline.setVisibility(View.VISIBLE);
                     spinKit.setVisibility(View.GONE);
                 }
@@ -163,7 +172,7 @@ public class PlayerActivity extends AppCompatActivity {
                     player.retry();
                 }
                 else {
-                    bicPicture.setVisibility(View.VISIBLE);
+                    imgBackground.setVisibility(View.VISIBLE);
                     layoutOffline.setVisibility(View.VISIBLE);
                 }
             }
@@ -192,11 +201,11 @@ public class PlayerActivity extends AppCompatActivity {
     public void onFavoriteClick(View v) {
         if (!pref.isFavorite(user)) {
             if(pref.addFavorite(user))
-                favorite.setImageResource(R.drawable.ic_action_favorite);
+                btnFavorite.setImageResource(R.drawable.ic_action_favorite);
         }
         else {
             if(pref.remFavorite(user))
-                favorite.setImageResource(R.drawable.ic_action_unfavorite);
+                btnFavorite.setImageResource(R.drawable.ic_action_unfavorite);
         }
     }
 
@@ -255,19 +264,32 @@ public class PlayerActivity extends AppCompatActivity {
                     String body = response.body().string();
                     Gson gson = new Gson();
                     JsonUser jsonObject = gson.fromJson(body, JsonUser.class);
-                    User data = jsonObject.getData();
+                    User data = jsonObject.data;
 
-                    user.setNickname(data.getNickname());
-                    user.setProfilepic(data.getProfilePic());
+                    user.mid = data.id;
+                    user.nickname = data.nickname;
+                    user.headPic = data.headPic;
+                    user.announcement = data.signature;
 
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            bicNickname.setText(data.getNickname());
+                            txtNickname.setText(data.nickname);
+                            txtBigNickname.setText(data.nickname);
+
                             Picasso.get()
-                                    .load(data.getBackgroundImage())
+                                    .load(data.headPic)
                                     .error(R.drawable.ic_no_image)
-                                    .into(bicPicture);
+                                    .into(imgProfile);
+
+                            Picasso.get()
+                                    .load(data.bgImg)
+                                    .error(R.drawable.ic_no_image)
+                                    .into(imgBackground);
+
+                            boolean isFavorite = pref.isFavorite(user);
+                            btnFavorite.setImageResource(isFavorite ?
+                                    R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
                         }
                     });
 

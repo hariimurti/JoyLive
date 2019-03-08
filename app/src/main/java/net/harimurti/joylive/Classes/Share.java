@@ -17,7 +17,7 @@ public class Share {
     public void Link(User user) {
         String text = String.format(Locale.getDefault(),
                 "%s — %s\n\n▶ LiveShow » %s",
-                user.getNickname(), user.getAnnouncement(), user.getLinkPlaylist());
+                user.nickname, user.getAnnouncement(), user.getLinkPlaylist());
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, "JoyLive.tv Streaming");

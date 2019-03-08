@@ -26,7 +26,7 @@ public class MainAdapter extends ArrayAdapter<User> {
     private Context context;
 
     private class ViewHolder {
-        CircleImageView image;
+        CircleImageView picture;
         TextView nickname;
         TextView status;
         TextView viewer;
@@ -34,7 +34,7 @@ public class MainAdapter extends ArrayAdapter<User> {
         LinearLayout layout;
 
         public ViewHolder(View view) {
-            image = view.findViewById(R.id.iv_picture);
+            picture = view.findViewById(R.id.iv_picture);
             nickname = view.findViewById(R.id.tv_nickname);
             status = view.findViewById(R.id.tv_status);
             viewer = view.findViewById(R.id.tv_viewer);
@@ -63,15 +63,15 @@ public class MainAdapter extends ArrayAdapter<User> {
         }
 
         Picasso.get()
-                .load(user.getProfilePic())
+                .load(user.headPic)
                 .error(R.drawable.ic_no_image)
-                .into(viewHolder.image);
+                .into(viewHolder.picture);
 
-        if (user.getPrice() > 0)
+        if (user.price > 0)
             viewHolder.nickname.setText(String.format(Locale.getDefault(),
-                    "%s - %d \uD83D\uDCB0", user.getNickname(), user.getPrice()));
+                    "%s - %d \uD83D\uDCB0", user.nickname, user.price));
         else
-            viewHolder.nickname.setText(user.getNickname());
+            viewHolder.nickname.setText(user.nickname);
 
         viewHolder.status.setText(user.getAnnouncement());
         viewHolder.viewer.setText(user.getViewerHumanReadable());
@@ -79,11 +79,11 @@ public class MainAdapter extends ArrayAdapter<User> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, PlayerActivity.class);
-                intent.putExtra(User.ID, user.getId());
-                intent.putExtra(User.NICKNAME, user.getNickname());
-                intent.putExtra(User.PROFILEPIC, user.getProfilePic());
+                intent.putExtra(User.MID, user.mid);
+                intent.putExtra(User.NICKNAME, user.nickname);
+                intent.putExtra(User.PROFILEPIC, user.headPic);
                 intent.putExtra(User.ANNOUNCEMENT, user.getAnnouncement());
-                intent.putExtra(User.LINKSTREAM, user.getLinkStream());
+                intent.putExtra(User.LINKSTREAM, user.videoPlayUrl);
                 context.startActivity(intent);
             }
         });
@@ -106,7 +106,7 @@ public class MainAdapter extends ArrayAdapter<User> {
 
         CircleImageView image = dialogView.findViewById(R.id.iv_picture);
         Picasso.get()
-                .load(user.getProfilePic())
+                .load(user.headPic)
                 .error(R.drawable.ic_no_image)
                 .into(image);
 
@@ -114,16 +114,16 @@ public class MainAdapter extends ArrayAdapter<User> {
         id.setText(user.getId());
 
         TextView nickname = dialogView.findViewById(R.id.tv_nickname);
-        nickname.setText(user.getNickname());
+        nickname.setText(user.nickname);
 
         TextView status = dialogView.findViewById(R.id.tv_status);
         status.setText(user.getAnnouncement());
 
         TextView fans = dialogView.findViewById(R.id.tv_fans);
-        fans.setText(user.getFansNum());
+        fans.setText(user.fansNum);
 
         TextView price = dialogView.findViewById(R.id.tv_price);
-        price.setText(String.format(Locale.getDefault(), "%d \uD83D\uDCB0", user.getPrice()));
+        price.setText(String.format(Locale.getDefault(), "%d \uD83D\uDCB0", user.price));
 
         TextView since = dialogView.findViewById(R.id.tv_starttime);
         since.setText(user.getPlayStartTime());
