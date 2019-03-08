@@ -103,12 +103,12 @@ public class PlayerActivity extends AppCompatActivity {
 
             Picasso.get()
                     .load(user.headPic)
-                    .error(R.drawable.ic_no_image)
+                    .error(R.drawable.user_default)
                     .into(imgProfile);
 
             Picasso.get()
                     .load(user.headPic)
-                    .error(R.drawable.ic_no_image)
+                    .error(R.drawable.user_default)
                     .into(imgBackground);
 
             boolean isFavorite = pref.isFavorite(user);
@@ -281,12 +281,12 @@ public class PlayerActivity extends AppCompatActivity {
 
                             Picasso.get()
                                     .load(data.headPic)
-                                    .error(R.drawable.ic_no_image)
+                                    .error(R.drawable.user_default)
                                     .into(imgProfile);
 
                             Picasso.get()
                                     .load(data.bgImg)
-                                    .error(R.drawable.ic_no_image)
+                                    .error(R.drawable.user_default)
                                     .into(imgBackground);
 
                             boolean isFavorite = pref.isFavorite(user);

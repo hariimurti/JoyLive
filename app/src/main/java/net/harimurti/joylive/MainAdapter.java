@@ -64,7 +64,7 @@ public class MainAdapter extends ArrayAdapter<User> {
 
         Picasso.get()
                 .load(user.headPic)
-                .error(R.drawable.ic_no_image)
+                .error(R.drawable.user_default)
                 .into(viewHolder.picture);
 
         if (user.price > 0)
@@ -107,7 +107,7 @@ public class MainAdapter extends ArrayAdapter<User> {
         CircleImageView image = dialogView.findViewById(R.id.iv_picture);
         Picasso.get()
                 .load(user.headPic)
-                .error(R.drawable.ic_no_image)
+                .error(R.drawable.user_default)
                 .into(image);
 
         TextView id = dialogView.findViewById(R.id.tv_id);
