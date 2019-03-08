@@ -271,7 +271,9 @@ public class PlayerActivity extends AppCompatActivity {
                     user.mid = data.id;
                     user.nickname = data.nickname;
                     user.headPic = data.headPic;
-                    user.announcement = data.signature;
+
+                    if (openFromExternal)
+                        user.announcement = data.signature;
 
                     activity.runOnUiThread(new Runnable() {
                         @Override
