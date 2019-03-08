@@ -58,6 +58,7 @@ public class PlayerActivity extends AppCompatActivity {
     private ImageButton btnFavorite;
     private SpinKitView spinKit;
     private User user;
+    private MediaSource videoSource;
     private boolean openFromExternal;
     private boolean isLayoutMenuLoaded;
 
@@ -128,10 +129,11 @@ public class PlayerActivity extends AppCompatActivity {
         playerView.setPlayer(player);
 
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
-                Util.getUserAgent(this, "ExoPlayer2"));
-        MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+                Util.getUserAgent(this, App.GogoLiveAgent));
+        videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(Uri.parse(user.videoPlayUrl));
 
+        player.setRepeatMode(Player.REPEAT_MODE_ALL);
         player.prepare(videoSource);
         player.addListener(new Player.EventListener() {
             @Override
@@ -168,10 +170,9 @@ public class PlayerActivity extends AppCompatActivity {
 
             @Override
             public void onPlayerError(ExoPlaybackException error) {
-                Log.e("Player", "Player error or Stream cannot be accessed...");
+                Log.e("Player", "Player error or Source can't be accessed...");
                 if (error.type != ExoPlaybackException.TYPE_SOURCE) {
-                    Log.d("Player", "AutoRetry...");
-                    player.retry();
+                    onRetryClick(null);
                 }
                 else {
                     imgBackground.setVisibility(View.VISIBLE);
@@ -223,10 +224,19 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     public void onRetryClick(View v) {
-        Log.d("Player", "Retry...");
-
-        player.retry();
         layoutOffline.setVisibility(View.INVISIBLE);
+        switch (player.getPlaybackState()) {
+            case Player.STATE_IDLE:
+                Log.d("Player", "Retry from idle state...");
+                player.prepare(videoSource);
+                player.setPlayWhenReady(true);
+                break;
+
+            case Player.STATE_ENDED:
+                Log.d("Player", "Retry from ended state...");
+                player.retry();
+                break;
+        }
     }
 
     private void GetUserInfo (String id) {
