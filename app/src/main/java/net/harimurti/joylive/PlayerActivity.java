@@ -59,6 +59,7 @@ public class PlayerActivity extends AppCompatActivity {
     private SpinKitView spinKit;
     private User user;
     private boolean openFromExternal;
+    private boolean isLayoutMenuLoaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +94,7 @@ public class PlayerActivity extends AppCompatActivity {
             String linkStream = bundle.getString(User.LINKSTREAM);
 
             user = new User(id, nickname, profilePic, announcement, linkStream);
+            isLayoutMenuLoaded = true;
         }
 
         if (!openFromExternal) {
@@ -114,7 +116,7 @@ public class PlayerActivity extends AppCompatActivity {
                     R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
         }
         else {
-            layoutMenu.setVisibility(View.GONE);
+            layoutMenu.setVisibility(View.INVISIBLE);
             Notification.Toast("Opening Stream from External Link");
         }
 
@@ -214,7 +216,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     public void onLayoutMenuClick(View v) {
-        if (openFromExternal) return;
+        if (!isLayoutMenuLoaded) return;
 
         layoutMenu.setVisibility(
                 layoutMenu.getVisibility() == View.VISIBLE ?  View.INVISIBLE : View.VISIBLE);
@@ -290,6 +292,9 @@ public class PlayerActivity extends AppCompatActivity {
                             boolean isFavorite = pref.isFavorite(user);
                             btnFavorite.setImageResource(isFavorite ?
                                     R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
+
+                            layoutMenu.setVisibility(View.VISIBLE);
+                            isLayoutMenuLoaded = true;
                         }
                     });
 
