@@ -107,11 +107,6 @@ public class PlayerActivity extends AppCompatActivity {
                     .error(R.drawable.user_default)
                     .into(imgProfile);
 
-            Picasso.get()
-                    .load(user.headPic)
-                    .error(R.drawable.user_default)
-                    .into(imgBackground);
-
             boolean isFavorite = pref.isFavorite(user);
             btnFavorite.setImageResource(isFavorite ?
                     R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
@@ -236,6 +231,18 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
+    private void SetBackgroundWithProfilePic() {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Picasso.get()
+                        .load(user.headPic)
+                        .error(R.drawable.user_default)
+                        .into(imgBackground);
+            }
+        });
+    }
+
     private void GetUserInfo (String id) {
         OkHttpClient client = new OkHttpClient();
         RequestBody body = new MultipartBody.Builder()
@@ -260,12 +267,14 @@ public class PlayerActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("GetUserInfo", e.getMessage());
+                SetBackgroundWithProfilePic();
             }
 
             @Override
             public void onResponse(Call call, Response response) {
                 if (!response.isSuccessful()) {
                     Log.e("GetUserInfo","Unexpected code " + response);
+                    SetBackgroundWithProfilePic();
                     return;
                 }
 
@@ -306,10 +315,10 @@ public class PlayerActivity extends AppCompatActivity {
                             isLayoutMenuLoaded = true;
                         }
                     });
-
                 }
                 catch (Exception ex) {
                     Log.e("GetUserInfo",ex.getMessage());
+                    SetBackgroundWithProfilePic();
                 }
             }
         });
