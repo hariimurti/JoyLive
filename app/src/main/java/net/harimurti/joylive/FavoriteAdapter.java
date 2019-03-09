@@ -69,11 +69,13 @@ public class FavoriteAdapter extends ArrayAdapter<User> {
                 .error(R.drawable.user_default)
                 .into(viewHolder.picture);
 
-        Checker checker = new Checker();
-        checker.link(user.getLinkPlaylist());
-        checker.into(viewHolder.play);
-        checker.setText("Checking...");
-        checker.into(viewHolder.status);
+        Checker checker = new Checker()
+                .link(user.getLinkPlaylist())
+                .checkingText("Wait...")
+                .onlineText("Live")
+                .offlineText("Offline")
+                .into(viewHolder.status)
+                .into(viewHolder.play);
         checker.execute();
 
         viewHolder.nickname.setText(user.nickname);

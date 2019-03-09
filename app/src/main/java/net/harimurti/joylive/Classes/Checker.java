@@ -11,22 +11,40 @@ public class Checker extends AsyncTask<Void, Void, Boolean> {
     private ImageButton imageButton;
     private TextView textView;
     private String url;
-    private String text;
+    private String checking = "Checking...";
+    private String online = "Online";
+    private String offline = "Offline";
 
-    public void link(String url) {
+    public Checker() {}
+
+    public Checker link(String url) {
         this.url = url;
+        return this;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public Checker checkingText(String checking) {
+        this.checking = checking;
+        return this;
     }
 
-    public void into(ImageButton imageButton) {
+    public Checker onlineText(String online) {
+        this.online = online;
+        return this;
+    }
+
+    public Checker offlineText(String offline) {
+        this.offline = offline;
+        return this;
+    }
+
+    public Checker into(ImageButton imageButton) {
         this.imageButton = imageButton;
+        return this;
     }
 
-    public void into(TextView textView) {
+    public Checker into(TextView textView) {
         this.textView = textView;
+        return this;
     }
 
     @Override
@@ -50,7 +68,7 @@ public class Checker extends AsyncTask<Void, Void, Boolean> {
             imageButton.setEnabled(false);
 
         if (textView != null)
-            textView.setText(text);
+            textView.setText(checking);
     }
 
     @Override
@@ -61,6 +79,6 @@ public class Checker extends AsyncTask<Void, Void, Boolean> {
             imageButton.setEnabled(bResponse);
 
         if (textView != null)
-            textView.setText(bResponse ? "Online" : "Offline");
+            textView.setText(bResponse ? online : offline);
     }
 }
