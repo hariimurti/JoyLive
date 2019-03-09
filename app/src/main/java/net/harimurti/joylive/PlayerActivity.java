@@ -49,7 +49,7 @@ public class PlayerActivity extends AppCompatActivity {
     private Activity activity;
     private Preferences pref;
     private SimpleExoPlayer player;
-    private RelativeLayout layoutMenu;
+    private RelativeLayout layoutShowHide;
     private LinearLayout layoutOffline;
     private TextView txtNickname;
     private TextView txtBigNickname;
@@ -60,7 +60,7 @@ public class PlayerActivity extends AppCompatActivity {
     private User user;
     private MediaSource videoSource;
     private boolean openFromExternal;
-    private boolean isLayoutMenuLoaded;
+    private boolean isUserLoaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class PlayerActivity extends AppCompatActivity {
         this.activity = this;
 
         pref = new Preferences();
-        layoutMenu = findViewById(R.id.layout_menu);
+        layoutShowHide = findViewById(R.id.layout_show_hide);
         layoutOffline = findViewById(R.id.layout_offline);
         btnFavorite = findViewById(R.id.ib_favorite);
         txtNickname = findViewById(R.id.tv_nickname);
@@ -95,7 +95,7 @@ public class PlayerActivity extends AppCompatActivity {
             String linkStream = bundle.getString(User.LINKSTREAM);
 
             user = new User(id, nickname, profilePic, announcement, linkStream);
-            isLayoutMenuLoaded = true;
+            isUserLoaded = true;
         }
 
         if (!openFromExternal) {
@@ -112,7 +112,7 @@ public class PlayerActivity extends AppCompatActivity {
                     R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
         }
         else {
-            layoutMenu.setVisibility(View.INVISIBLE);
+            layoutShowHide.setVisibility(View.INVISIBLE);
             Notification.Toast("Opening Stream from External Link");
         }
 
@@ -208,11 +208,11 @@ public class PlayerActivity extends AppCompatActivity {
         new Share(this).Link(user);
     }
 
-    public void onLayoutMenuClick(View v) {
-        if (!isLayoutMenuLoaded) return;
+    public void onShowHideClick(View v) {
+        if (!isUserLoaded) return;
 
-        layoutMenu.setVisibility(
-                layoutMenu.getVisibility() == View.VISIBLE ?  View.INVISIBLE : View.VISIBLE);
+        layoutShowHide.setVisibility(
+                layoutShowHide.getVisibility() == View.VISIBLE ?  View.INVISIBLE : View.VISIBLE);
     }
 
     public void onRetryClick(View v) {
@@ -311,8 +311,8 @@ public class PlayerActivity extends AppCompatActivity {
                             btnFavorite.setImageResource(isFavorite ?
                                     R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
 
-                            layoutMenu.setVisibility(View.VISIBLE);
-                            isLayoutMenuLoaded = true;
+                            layoutShowHide.setVisibility(View.VISIBLE);
+                            isUserLoaded = true;
                         }
                     });
                 }

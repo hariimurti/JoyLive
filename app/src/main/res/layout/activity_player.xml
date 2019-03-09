@@ -21,7 +21,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:onClick="onLayoutMenuClick"
+                android:onClick="onShowHideClick"
                 android:background="@null"/>
 
             <ImageView
@@ -93,7 +93,7 @@
                 style="@style/SpinKitView.Large.Wave" />
 
             <RelativeLayout
-                android:id="@+id/layout_menu"
+                android:id="@+id/layout_show_hide"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp">
