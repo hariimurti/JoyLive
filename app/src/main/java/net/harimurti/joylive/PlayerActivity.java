@@ -149,22 +149,19 @@ public class PlayerActivity extends AppCompatActivity {
 
                 if (playbackState == Player.STATE_BUFFERING) {
                     spinKit.setVisibility(View.VISIBLE);
+                    layoutOffline.setVisibility(View.INVISIBLE);
                 }
 
                 if (playbackState == Player.STATE_READY) {
-                    user.setPlayStartTimeNow();
-                    spinKit.setVisibility(View.GONE);
-                }
-
-                if (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING) {
+                    spinKit.setVisibility(View.INVISIBLE);
                     imgBackground.setVisibility(View.INVISIBLE);
                     layoutOffline.setVisibility(View.INVISIBLE);
                 }
 
                 if (playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED) {
+                    spinKit.setVisibility(View.INVISIBLE);
                     imgBackground.setVisibility(View.VISIBLE);
                     layoutOffline.setVisibility(View.VISIBLE);
-                    spinKit.setVisibility(View.GONE);
                 }
             }
 
