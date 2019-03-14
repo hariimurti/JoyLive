@@ -38,8 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:orientation="vertical"
-                android:onClick="onRetryClick">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_big_nickname"
@@ -50,29 +49,32 @@
                     android:shadowDx="2"
                     android:shadowDy="2"
                     android:shadowRadius="2"
-                    android:text="Unknown User"
+                    android:text="@string/unknown_user"
                     android:textAlignment="center"
                     android:textColor="@color/text_light"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tv_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="SHOW IS OVER"
-                    android:textAlignment="center"
-                    android:textColor="@color/text_light"
                     android:shadowColor="@color/text_shadow"
                     android:shadowDx="2"
                     android:shadowDy="2"
                     android:shadowRadius="2"
+                    android:text="@string/show_is_over"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/text_light"
                     android:textSize="30sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tv_sub_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Tap to Retry"
+                    android:text="@string/try_to_connect"
                     android:textAlignment="center"
                     android:textColor="@color/text_light"
                     android:shadowColor="@color/text_shadow"

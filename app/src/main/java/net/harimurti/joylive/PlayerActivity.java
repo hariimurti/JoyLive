@@ -53,6 +53,8 @@ public class PlayerActivity extends AppCompatActivity {
     private LinearLayout layoutOffline;
     private TextView txtNickname;
     private TextView txtBigNickname;
+    private TextView txtMessage;
+    private TextView txtSubMessage;
     private CircleImageView imgProfile;
     private ImageView imgBackground;
     private ImageButton btnFavorite;
@@ -75,6 +77,8 @@ public class PlayerActivity extends AppCompatActivity {
         txtNickname = findViewById(R.id.tv_nickname);
         imgProfile = findViewById(R.id.iv_picture);
         txtBigNickname = findViewById(R.id.tv_big_nickname);
+        txtMessage = findViewById(R.id.tv_message);
+        txtSubMessage = findViewById(R.id.tv_sub_message);
         imgBackground = findViewById(R.id.iv_big_picture);
         spinKit = findViewById(R.id.spin_kit);
 
@@ -164,12 +168,17 @@ public class PlayerActivity extends AppCompatActivity {
             public void onPlayerError(ExoPlaybackException error) {
                 Log.e("Player", "Player error or Source can't be accessed...");
                 if (error.type != ExoPlaybackException.TYPE_SOURCE) {
-                    onRetryClick(null);
+                    SetMessage(false);
+                    layoutOffline.setVisibility(View.INVISIBLE);
                 }
                 else {
+                    SetMessage(true);
                     imgBackground.setVisibility(View.VISIBLE);
                     layoutOffline.setVisibility(View.VISIBLE);
                 }
+
+                spinKit.setVisibility(View.INVISIBLE);
+                RetryPlayback();
             }
         });
     }
@@ -215,32 +224,16 @@ public class PlayerActivity extends AppCompatActivity {
                 layoutShowHide.getVisibility() == View.VISIBLE ?  View.INVISIBLE : View.VISIBLE);
     }
 
-    public void onRetryClick(View v) {
-        layoutOffline.setVisibility(View.INVISIBLE);
-        switch (player.getPlaybackState()) {
-            case Player.STATE_IDLE:
-                Log.d("Player", "Retry from idle state...");
-                player.prepare(videoSource);
-                player.setPlayWhenReady(true);
-                break;
-
-            case Player.STATE_ENDED:
-                Log.d("Player", "Retry from ended state...");
-                player.retry();
-                break;
+    public void RetryPlayback() {
+        try {
+            Thread.sleep(5000);
+            Log.d("Player", "Retrying...");
+            player.prepare(videoSource);
+            player.setPlayWhenReady(true);
         }
-    }
-
-    private void SetBackgroundWithProfilePic() {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Picasso.get()
-                        .load(user.headPic)
-                        .error(R.drawable.user_default)
-                        .into(imgBackground);
-            }
-        });
+        catch (Exception e) {
+            Log.e("Player", e.getMessage());
+        }
     }
 
     private void GetUserInfo (String id) {
@@ -320,6 +313,28 @@ public class PlayerActivity extends AppCompatActivity {
                     Log.e("GetUserInfo",ex.getMessage());
                     SetBackgroundWithProfilePic();
                 }
+            }
+        });
+    }
+
+    private void SetBackgroundWithProfilePic() {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Picasso.get()
+                        .load(user.headPic)
+                        .error(R.drawable.user_default)
+                        .into(imgBackground);
+            }
+        });
+    }
+
+    private void SetMessage(boolean isShowOver) {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                txtMessage.setText(isShowOver ? R.string.show_is_over : R.string.network_problem);
+                txtSubMessage.setText(isShowOver ? R.string.waiting_broadcaster : R.string.try_to_connect);
             }
         });
     }
