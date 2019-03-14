@@ -65,7 +65,7 @@ public class FavoriteAdapter extends ArrayAdapter<User> {
         }
 
         Picasso.get()
-                .load(user.nickname)
+                .load(user.headPic)
                 .error(R.drawable.user_default)
                 .into(viewHolder.picture);
 
