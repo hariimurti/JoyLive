@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import net.harimurti.joylive.R;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -11,29 +13,11 @@ public class Checker extends AsyncTask<Void, Void, Boolean> {
     private ImageButton imageButton;
     private TextView textView;
     private String url;
-    private String checking = "Checking...";
-    private String online = "Online";
-    private String offline = "Offline";
 
     public Checker() {}
 
     public Checker link(String url) {
         this.url = url;
-        return this;
-    }
-
-    public Checker checkingText(String checking) {
-        this.checking = checking;
-        return this;
-    }
-
-    public Checker onlineText(String online) {
-        this.online = online;
-        return this;
-    }
-
-    public Checker offlineText(String offline) {
-        this.offline = offline;
         return this;
     }
 
@@ -68,17 +52,20 @@ public class Checker extends AsyncTask<Void, Void, Boolean> {
             imageButton.setEnabled(false);
 
         if (textView != null)
-            textView.setText(checking);
+            textView.setText("Checking...");
     }
 
     @Override
     protected void onPostExecute(Boolean result) {
         boolean bResponse = result;
 
-        if (imageButton != null)
+        if (imageButton != null) {
             imageButton.setEnabled(bResponse);
+            imageButton.setImageResource(bResponse ? R.drawable.ic_action_play : R.drawable.ic_action_play_grey);
+        }
 
-        if (textView != null)
-            textView.setText(bResponse ? online : offline);
+        if (textView != null) {
+            textView.setText(bResponse ? "Live" : "Offline");
+        }
     }
 }

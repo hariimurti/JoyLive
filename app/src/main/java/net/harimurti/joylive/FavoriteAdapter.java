@@ -71,9 +71,6 @@ public class FavoriteAdapter extends ArrayAdapter<User> {
 
         Checker checker = new Checker()
                 .link(user.getLinkPlaylist())
-                .checkingText("Wait...")
-                .onlineText("Live")
-                .offlineText("Offline")
                 .into(viewHolder.status)
                 .into(viewHolder.play);
         checker.execute();
