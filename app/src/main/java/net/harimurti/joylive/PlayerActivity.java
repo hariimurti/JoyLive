@@ -225,15 +225,16 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     public void RetryPlayback() {
-        try {
-            Thread.sleep(5000);
-            Log.d("Player", "Retrying...");
-            player.prepare(videoSource);
-            player.setPlayWhenReady(true);
-        }
-        catch (Exception e) {
-            Log.e("Player", e.getMessage());
-        }
+        new Thread( new Runnable() {
+            public void run()  {
+                try  { Thread.sleep( 5000 ); }
+                catch (InterruptedException ie)  {}
+            }
+        } ).start();
+
+        Log.d("Player", "Retrying...");
+        player.prepare(videoSource);
+        player.setPlayWhenReady(true);
     }
 
     private void GetUserInfo (String id) {
