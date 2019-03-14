@@ -191,8 +191,8 @@ public class MainActivity extends AppCompatActivity {
 
                     int count = 0;
                     for (User user: users) {
-                        // only girls
-                        if (!user.sex.equals("2")) continue;
+                        // show female & unknown, skip male
+                        if (user.sex.equals("1")) continue;
 
                         if (!User.isContainInList(listUser, user)) {
                             listUser.add(user);
@@ -208,8 +208,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    Log.d("GetRooms", "Found " + Integer.toString(count) + " new girls");
-                    Notification.Toast("Found " + Integer.toString(count) + " new girls");
+                    Log.d("GetRooms", "Found " + Integer.toString(count) + " new users");
+                    Notification.Toast("Found " + Integer.toString(count) + " new users");
                 }
                 catch (IOException e) {
                     Log.e("GetRooms", e.getMessage());
