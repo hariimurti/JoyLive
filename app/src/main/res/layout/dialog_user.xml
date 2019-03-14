@@ -29,12 +29,12 @@
         <TextView
             android:layout_width="@dimen/dialog_label"
             android:layout_height="wrap_content"
-            android:text="Member" />
+            android:text="@string/member" />
 
         <TextView
             android:layout_width="10dp"
             android:layout_height="wrap_content"
-            android:text=":"
+            android:text="@string/colon"
             android:textAlignment="center" />
 
         <TextView
@@ -54,12 +54,12 @@
         <TextView
             android:layout_width="@dimen/dialog_label"
             android:layout_height="wrap_content"
-            android:text="Nickname" />
+            android:text="@string/nickname" />
 
         <TextView
             android:layout_width="10dp"
             android:layout_height="wrap_content"
-            android:text=":"
+            android:text="@string/colon"
             android:textAlignment="center" />
 
         <TextView
@@ -79,12 +79,12 @@
         <TextView
             android:layout_width="@dimen/dialog_label"
             android:layout_height="wrap_content"
-            android:text="Annauncement" />
+            android:text="@string/announcement" />
 
         <TextView
             android:layout_width="10dp"
             android:layout_height="wrap_content"
-            android:text=":"
+            android:text="@string/colon"
             android:textAlignment="center" />
 
         <TextView
@@ -104,12 +104,12 @@
         <TextView
             android:layout_width="@dimen/dialog_label"
             android:layout_height="wrap_content"
-            android:text="Fans" />
+            android:text="@string/fans" />
 
         <TextView
             android:layout_width="10dp"
             android:layout_height="wrap_content"
-            android:text=":"
+            android:text="@string/colon"
             android:textAlignment="center" />
 
         <TextView
@@ -129,12 +129,12 @@
         <TextView
             android:layout_width="@dimen/dialog_label"
             android:layout_height="wrap_content"
-            android:text="Price" />
+            android:text="@string/price" />
 
         <TextView
             android:layout_width="10dp"
             android:layout_height="wrap_content"
-            android:text=":"
+            android:text="@string/colon"
             android:textAlignment="center" />
 
         <TextView
@@ -154,12 +154,12 @@
         <TextView
             android:layout_width="@dimen/dialog_label"
             android:layout_height="wrap_content"
-            android:text="Live Since" />
+            android:text="@string/live_since" />
 
         <TextView
             android:layout_width="10dp"
             android:layout_height="wrap_content"
-            android:text=":"
+            android:text="@string/colon"
             android:textAlignment="center" />
 
         <TextView
@@ -179,12 +179,12 @@
         <TextView
             android:layout_width="@dimen/dialog_label"
             android:layout_height="wrap_content"
-            android:text="Viewer" />
+            android:text="@string/viewer" />
 
         <TextView
             android:layout_width="10dp"
             android:layout_height="wrap_content"
-            android:text=":"
+            android:text="@string/colon"
             android:textAlignment="center" />
 
         <TextView

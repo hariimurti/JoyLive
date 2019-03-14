@@ -3,10 +3,23 @@
     <string name="app_name">JoyLive Unofficial</string>
     <string name="app_title">JoyLive - Hot Girls</string>
     <string name="app_favorite">JoyLive - Favorites</string>
+    <!-- dialog -->
+    <string name="member">Member</string>
+    <string name="nickname">Nickname</string>
+    <string name="announcement">Announcement</string>
+    <string name="fans">Fans</string>
+    <string name="price">Price</string>
+    <string name="live_since">Live Since</string>
+    <string name="last_seen">Last Seen</string>
+    <string name="viewer">Viewer</string>
+    <!-- favorite -->
+    <string name="last_seen_colon">Last Seen :</string>
     <!-- player -->
     <string name="unknown_user">Unknown User</string>
     <string name="show_is_over">Show is Over</string>
     <string name="network_problem">Network Problem</string>
     <string name="waiting_broadcaster">waiting for broadcasters online&#8230;</string>
     <string name="try_to_connect">trying to connect&#8230;</string>
+    <!-- universal -->
+    <string name="colon">:</string>
 </resources>
