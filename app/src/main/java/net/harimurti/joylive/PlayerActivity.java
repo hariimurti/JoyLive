@@ -135,8 +135,8 @@ public class PlayerActivity extends AppCompatActivity {
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
                 if (playWhenReady) {
                     if (playbackState == Player.STATE_READY) {
+                        user.setPlayStartTimeNow();
                         if (pref.isFavorite(user)) {
-                            user.setPlayStartTimeNow();
                             pref.addOrUpdateFavorite(user);
                         }
                     }
