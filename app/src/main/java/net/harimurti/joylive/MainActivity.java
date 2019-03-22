@@ -74,14 +74,18 @@ public class MainActivity extends AppCompatActivity {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                listUser.clear();
-                GetRooms(1);
-                swipeRefresh.setRefreshing(false);
+                ResetList();
             }
         });
 
         //load users for first time
         GetRooms(1);
+    }
+
+    private void ResetList() {
+        listUser.clear();
+        GetRooms(1);
+        swipeRefresh.setRefreshing(false);
     }
 
     @Override
@@ -97,6 +101,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_favorite:
                 Intent intent = new Intent(this, FavoriteActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.action_reset:
+                ResetList();
                 break;
 
             case R.id.action_about:
