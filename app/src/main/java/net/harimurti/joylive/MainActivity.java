@@ -1,6 +1,8 @@
 package net.harimurti.joylive;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
@@ -8,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -107,9 +110,18 @@ public class MainActivity extends AppCompatActivity {
             dialog.setView(dialogView);
             dialog.setCancelable(false);
 
+            EditText inputKey = dialogView.findViewById(R.id.inputKey);
             EditText inputSerial =dialogView.findViewById(R.id.inputSerial);
             inputSerial.setText(serial);
-            EditText inputKey = dialogView.findViewById(R.id.inputKey);
+            inputSerial.setInputType(InputType.TYPE_NULL);
+            inputSerial.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    clipboard.setPrimaryClip(ClipData.newPlainText("Serial", serial));
+                    Notification.Toast("Copied into clipboard");
+                }
+            });
 
             dialog.setNeutralButton("Register", new DialogInterface.OnClickListener() {
                 @Override
