@@ -17,6 +17,9 @@
     <string name="live_since">Live Since</string>
     <string name="last_seen">Last Seen</string>
     <string name="viewer">Viewer</string>
+    <string name="registration">App Registration</string>
+    <string name="serial">Serial :</string>
+    <string name="key">Key :</string>
     <!-- favorite -->
     <string name="last_seen_colon">Last Seen :</string>
     <!-- player -->

@@ -17,6 +17,7 @@ public class Preferences {
 
     public static final String KEY_3RD_PLAYER = "USE_3RD_PLAYER";
     public static final String FAVORITE_LIST = "FAVORITE_LIST";
+    public static final String APP_KEY = "APP_KEY";
 
     private SharedPreferences preferences;
     private SharedPreferences.Editor prefEditor;
@@ -107,5 +108,20 @@ public class Preferences {
         ArrayList<User> newList = User.removeFromList(list, user);
         setFavorite(newList);
         return true;
+    }
+
+    public boolean isRegValid(String serial) {
+        String key = getString(APP_KEY);
+        if (key.isEmpty()) return false;
+        return Converter.DecodeKey(key).equals(serial);
+    }
+
+    public boolean appKeyValidation(String serial, String key) {
+        if (key.isEmpty()) return false;
+        if (Converter.DecodeKey(key).equals(serial)) {
+            setString(APP_KEY, key);
+            return true;
+        }
+        return false;
     }
 }

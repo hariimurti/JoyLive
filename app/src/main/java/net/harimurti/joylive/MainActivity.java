@@ -1,19 +1,25 @@
 package net.harimurti.joylive;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AbsListView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
 
+import net.harimurti.joylive.Classes.Preferences;
 import net.harimurti.joylive.JsonClass.JsonRoom;
 import net.harimurti.joylive.Classes.Menu;
 import net.harimurti.joylive.Classes.Notification;
@@ -37,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefresh;
     private static ArrayList<User> listUser = new ArrayList<>();
     private static MainAdapter mainAdapter;
+    private Preferences pref = new Preferences();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +93,42 @@ public class MainActivity extends AppCompatActivity {
         listUser.clear();
         GetRooms(1);
         swipeRefresh.setRefreshing(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String serial = App.getSerialNumber();
+        if (!pref.isRegValid(serial)) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            View dialogView = LayoutInflater.from(this)
+                    .inflate(R.layout.dialog_auth, null);
+            dialog.setView(dialogView);
+            dialog.setCancelable(false);
+
+            EditText inputSerial =dialogView.findViewById(R.id.inputSerial);
+            inputSerial.setText(serial);
+            EditText inputKey = dialogView.findViewById(R.id.inputKey);
+
+            dialog.setNeutralButton("Register", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String key = inputKey.getText().toString();
+                    boolean valid = pref.appKeyValidation(serial, key);
+                    if (!valid) finish();
+                }
+            });
+
+            dialog.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+
+            dialog.show();
+        }
     }
 
     @Override
