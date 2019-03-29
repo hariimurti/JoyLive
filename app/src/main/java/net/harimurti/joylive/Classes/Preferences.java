@@ -110,14 +110,18 @@ public class Preferences {
         return true;
     }
 
-    public boolean isRegValid(String serial) {
+    public boolean isRegistered() {
         String key = getString(APP_KEY);
         if (key.isEmpty()) return false;
+
+        String serial = App.getSerialNumber();
         return Converter.DecodeKey(key).equals(serial);
     }
 
-    public boolean appKeyValidation(String serial, String key) {
+    public boolean Register(String key) {
         if (key.isEmpty()) return false;
+
+        String serial = App.getSerialNumber();
         if (Converter.DecodeKey(key).equals(serial)) {
             setString(APP_KEY, key);
             return true;

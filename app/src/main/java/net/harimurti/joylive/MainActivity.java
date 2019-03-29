@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefresh;
     private static ArrayList<User> listUser = new ArrayList<>();
     private static MainAdapter mainAdapter;
-    private Preferences pref = new Preferences();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,46 +100,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        String serial = App.getSerialNumber();
-        if (!pref.isRegValid(serial)) {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            View dialogView = LayoutInflater.from(this)
-                    .inflate(R.layout.dialog_auth, null);
-            dialog.setView(dialogView);
-            dialog.setCancelable(false);
-
-            EditText inputKey = dialogView.findViewById(R.id.inputKey);
-            EditText inputSerial =dialogView.findViewById(R.id.inputSerial);
-            inputSerial.setText(serial);
-            inputSerial.setInputType(InputType.TYPE_NULL);
-            inputSerial.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                    clipboard.setPrimaryClip(ClipData.newPlainText("Serial", serial));
-                    Notification.Toast("Copied into clipboard");
-                }
-            });
-
-            dialog.setNeutralButton("Register", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String key = inputKey.getText().toString();
-                    boolean valid = pref.appKeyValidation(serial, key);
-                    if (!valid) finish();
-                }
-            });
-
-            dialog.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            });
-
-            dialog.show();
-        }
+        new AuthDialog().execute(this);
     }
 
     @Override
