@@ -17,6 +17,7 @@ import net.harimurti.joylive.Classes.Preferences;
 import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class AuthDialog extends AsyncTask<Activity, Void, Boolean> {
+    private static boolean onPostExecute;
     private Activity activity;
     private Preferences pref = new Preferences();
 
@@ -29,6 +30,7 @@ public class AuthDialog extends AsyncTask<Activity, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean result) {
         if (result) return;
+        if (onPostExecute) return;
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
         View dialogView = LayoutInflater.from(activity)
@@ -36,6 +38,7 @@ public class AuthDialog extends AsyncTask<Activity, Void, Boolean> {
         dialog.setView(dialogView);
         dialog.setCancelable(false);
 
+        onPostExecute = true;
         String serial = App.getSerialNumber();
 
         EditText inputKey = dialogView.findViewById(R.id.inputKey);
