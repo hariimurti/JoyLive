@@ -2,13 +2,12 @@ package net.harimurti.joylive.Classes;
 
 import android.util.Base64;
 
-import net.harimurti.joylive.JsonClass.User;
+import net.harimurti.joylive.JsonData.User;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.spec.KeySpec;
 import java.text.SimpleDateFormat;
-//import java.util.Base64;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;

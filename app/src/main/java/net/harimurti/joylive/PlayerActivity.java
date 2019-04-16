@@ -3,6 +3,8 @@ package net.harimurti.joylive;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,30 +26,21 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import net.harimurti.joylive.JsonClass.JsonUser;
+import net.harimurti.joylive.Classes.AsyncSleep;
 import net.harimurti.joylive.Classes.Converter;
+import net.harimurti.joylive.Classes.Favorite;
 import net.harimurti.joylive.Classes.Notification;
-import net.harimurti.joylive.JsonClass.User;
-import net.harimurti.joylive.Classes.Preferences;
 import net.harimurti.joylive.Classes.Share;
-
-import java.io.IOException;
+import net.harimurti.joylive.JsonData.User;
+import net.harimurti.joylive.JsonData.UserFav;
+import net.harimurti.joylive.Rest.RestClient;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class PlayerActivity extends AppCompatActivity {
-    private Activity activity;
-    private Preferences pref;
+    private Favorite favorite;
     private SimpleExoPlayer player;
     private RelativeLayout layoutShowHide;
     private LinearLayout layoutOffline;
@@ -60,6 +53,7 @@ public class PlayerActivity extends AppCompatActivity {
     private ImageButton btnFavorite;
     private SpinKitView spinKit;
     private User user;
+    private UserFav userFav;
     private MediaSource videoSource;
     private boolean openFromExternal;
     private boolean isUserLoaded;
@@ -68,9 +62,9 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-        this.activity = this;
+        Activity activity = this;
 
-        pref = new Preferences();
+        favorite = new Favorite();
         layoutShowHide = findViewById(R.id.layout_show_hide);
         layoutOffline = findViewById(R.id.layout_offline);
         btnFavorite = findViewById(R.id.ib_favorite);
@@ -92,16 +86,17 @@ public class PlayerActivity extends AppCompatActivity {
         }
         else {
             Bundle bundle = intent.getExtras();
-            String id = bundle.getString(User.MID);
-            String profilePic = bundle.getString(User.PROFILEPIC);
+            String id = bundle.getString(User.ID);
+            String profilePic = bundle.getString(User.HEADPIC);
             String nickname = bundle.getString(User.NICKNAME);
             String announcement = bundle.getString(User.ANNOUNCEMENT);
-            String linkStream = bundle.getString(User.LINKSTREAM);
+            String linkStream = bundle.getString(User.VIDEOPLAYURL);
 
             user = new User(id, nickname, profilePic, announcement, linkStream);
             isUserLoaded = true;
         }
 
+        userFav = new UserFav().convertFrom(user);
         if (!openFromExternal) {
             txtNickname.setText(user.nickname);
             txtBigNickname.setText(user.nickname);
@@ -111,16 +106,62 @@ public class PlayerActivity extends AppCompatActivity {
                     .error(R.drawable.user_default)
                     .into(imgProfile);
 
-            boolean isFavorite = pref.isFavorite(user);
+            boolean isFavorite = favorite.exist(userFav);
             btnFavorite.setImageResource(isFavorite ?
                     R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
         }
         else {
             layoutShowHide.setVisibility(View.INVISIBLE);
-            Notification.Toast("Opening Stream from External Link");
+            Notification.Toast(getString(R.string.play_from_external));
         }
 
-        GetUserInfo(user.getId());
+        RestClient client = new RestClient();
+        client.setOnUserInfoListener(new RestClient.OnUserInfoListener() {
+            @Override
+            public void onError() {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Picasso.get()
+                                .load(user.headPic)
+                                .error(R.drawable.user_default)
+                                .into(imgBackground);
+                    }
+                });
+            }
+
+            @Override
+            public void onSuccess(User result) {
+                user.setId(result.getId());
+                user.nickname = result.nickname;
+                user.headPic = result.headPic;
+                user.signature = result.signature;
+                userFav = new UserFav().convertFrom(user);
+
+                txtNickname.setText(result.nickname);
+                txtBigNickname.setText(result.nickname);
+                btnFavorite.setImageResource(favorite.exist(userFav) ?
+                        R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
+                layoutShowHide.setVisibility(View.VISIBLE);
+                isUserLoaded = true;
+
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Picasso.get()
+                                .load(result.headPic)
+                                .error(R.drawable.user_default)
+                                .into(imgProfile);
+
+                        Picasso.get()
+                                .load(result.bgImg)
+                                .error(R.drawable.user_default)
+                                .into(imgBackground);
+                    }
+                });
+            }
+        });
+        client.getUserInfo(user.getId());
 
         player = ExoPlayerFactory.newSimpleInstance(this);
 
@@ -137,12 +178,10 @@ public class PlayerActivity extends AppCompatActivity {
         player.addListener(new Player.EventListener() {
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                if (playWhenReady) {
-                    if (playbackState == Player.STATE_READY) {
-                        user.setPlayStartTimeNow();
-                        if (pref.isFavorite(user)) {
-                            pref.addOrUpdateFavorite(user);
-                        }
+                if (playWhenReady && (playbackState == Player.STATE_READY)) {
+                    if (favorite.exist(userFav)) {
+                        userFav.setLastSeenNow();
+                        favorite.addOrUpdate(userFav);
                     }
                 }
 
@@ -167,6 +206,8 @@ public class PlayerActivity extends AppCompatActivity {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
                 Log.e("Player", "Player error or Source can't be accessed...");
+                spinKit.setVisibility(View.INVISIBLE);
+
                 if (error.type != ExoPlaybackException.TYPE_SOURCE) {
                     SetMessage(false);
                     layoutOffline.setVisibility(View.INVISIBLE);
@@ -177,7 +218,6 @@ public class PlayerActivity extends AppCompatActivity {
                     layoutOffline.setVisibility(View.VISIBLE);
                 }
 
-                spinKit.setVisibility(View.INVISIBLE);
                 RetryPlayback();
             }
         });
@@ -197,18 +237,18 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         player.setPlayWhenReady(false);
     }
 
     public void onFavoriteClick(View v) {
-        if (!pref.isFavorite(user)) {
-            if(pref.addFavorite(user))
+        if (!favorite.exist(userFav)) {
+            if(favorite.add(userFav))
                 btnFavorite.setImageResource(R.drawable.ic_action_favorite);
         }
         else {
-            if(pref.remFavorite(user))
+            if(favorite.remove(userFav))
                 btnFavorite.setImageResource(R.drawable.ic_action_unfavorite);
         }
     }
@@ -225,118 +265,18 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     public void RetryPlayback() {
-        new Thread( new Runnable() {
-            public void run()  {
-                try  { Thread.sleep( 5000 ); }
-                catch (InterruptedException ie)  {}
-            }
-        } ).start();
-
-        Log.d("Player", "Retrying...");
-        player.prepare(videoSource);
-        player.setPlayWhenReady(true);
-    }
-
-    private void GetUserInfo (String id) {
-        OkHttpClient client = new OkHttpClient();
-        RequestBody body = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("androidVersion", App.AndroidVersion)
-                .addFormDataPart("packageId", "3")
-                .addFormDataPart("channel", "developer-default")
-                .addFormDataPart("version", App.GogoLiveVersion)
-                .addFormDataPart("deviceName", App.DeviceName)
-                .addFormDataPart("platform", "android")
-                .build();
-        Request request = new Request.Builder()
-                .url("http://app.joylive.tv/user/GetUserInfo?uid=" + id)
-                .post(body)
-                .addHeader("Host", "app.joylive.tv")
-                .addHeader("User-Agent", App.GogoLiveAgent)
-                .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .addHeader("Connection","keep-alive")
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
+        new AsyncSleep().setListener(new AsyncSleep.Listener() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("GetUserInfo", e.getMessage());
-                SetBackgroundWithProfilePic();
+            public void onFinish() {
+                Log.d("Player", "Retrying...");
+                player.prepare(videoSource);
+                player.setPlayWhenReady(true);
             }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                if (!response.isSuccessful()) {
-                    Log.e("GetUserInfo","Unexpected code " + response);
-                    SetBackgroundWithProfilePic();
-                    return;
-                }
-
-                try {
-                    String body = response.body().string();
-                    Gson gson = new Gson();
-                    JsonUser jsonObject = gson.fromJson(body, JsonUser.class);
-                    User data = jsonObject.data;
-
-                    user.mid = data.id;
-                    user.nickname = data.nickname;
-                    user.headPic = data.headPic;
-
-                    if (openFromExternal)
-                        user.announcement = data.signature;
-
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            txtNickname.setText(data.nickname);
-                            txtBigNickname.setText(data.nickname);
-
-                            Picasso.get()
-                                    .load(data.headPic)
-                                    .error(R.drawable.user_default)
-                                    .into(imgProfile);
-
-                            Picasso.get()
-                                    .load(data.bgImg)
-                                    .error(R.drawable.user_default)
-                                    .into(imgBackground);
-
-                            boolean isFavorite = pref.isFavorite(user);
-                            btnFavorite.setImageResource(isFavorite ?
-                                    R.drawable.ic_action_favorite : R.drawable.ic_action_unfavorite);
-
-                            layoutShowHide.setVisibility(View.VISIBLE);
-                            isUserLoaded = true;
-                        }
-                    });
-                }
-                catch (Exception ex) {
-                    Log.e("GetUserInfo",ex.getMessage());
-                    SetBackgroundWithProfilePic();
-                }
-            }
-        });
-    }
-
-    private void SetBackgroundWithProfilePic() {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Picasso.get()
-                        .load(user.headPic)
-                        .error(R.drawable.user_default)
-                        .into(imgBackground);
-            }
-        });
+        }).start(5);
     }
 
     private void SetMessage(boolean isShowOver) {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                txtMessage.setText(isShowOver ? R.string.show_is_over : R.string.network_problem);
-                txtSubMessage.setText(isShowOver ? R.string.waiting_broadcaster : R.string.try_to_connect);
-            }
-        });
+        txtMessage.setText(isShowOver ? R.string.show_is_over : R.string.network_problem);
+        txtSubMessage.setText(isShowOver ? R.string.waiting_broadcaster : R.string.try_to_connect);
     }
 }

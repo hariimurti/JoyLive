@@ -1,8 +1,9 @@
 <resources>
     <!-- main -->
     <string name="app_name">JoyLive Unofficial</string>
-    <string name="app_title">JoyLive - Hot List</string>
+    <string name="app_title">JoyLive - Unofficial</string>
     <string name="app_favorite">JoyLive - Favorites</string>
+    <string name="welcome_text">JoyLive / GogoLive\n&#8212; &#8212; &#8212;\nThe Best Live Show Ever!</string>
     <!-- menu -->
     <string name="menu_favorites">Favorites</string>
     <string name="menu_reset">Reset List</string>
@@ -21,13 +22,23 @@
     <string name="serial">Serial :</string>
     <string name="key">Key :</string>
     <!-- favorite -->
+    <string name="no_favorite_users">No Favorite User!</string>
     <string name="last_seen_colon">Last Seen :</string>
+    <string name="status_checking">Checking&#8230;</string>
+    <string name="status_live">Live Now</string>
+    <string name="status_offline">Offline</string>
+    <string name="status_error">Error</string>
+    <string name="status_login">Login</string>
     <!-- player -->
     <string name="unknown_user">Unknown User</string>
     <string name="show_is_over">Show is Over</string>
     <string name="network_problem">Network Problem</string>
     <string name="waiting_broadcaster">waiting for broadcasters online&#8230;</string>
     <string name="try_to_connect">trying to connect&#8230;</string>
+    <!-- toast -->
+    <string name="press_back_twice">Press twice to close</string>
+    <string name="something_wrong">Something went wrong! Try again later.</string>
+    <string name="play_from_external">Play Stream from External Link!</string>
     <!-- universal -->
     <string name="colon">:</string>
 </resources>

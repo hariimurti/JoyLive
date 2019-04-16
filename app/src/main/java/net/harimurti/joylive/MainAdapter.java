@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import net.harimurti.joylive.JsonClass.User;
 import net.harimurti.joylive.Classes.Share;
+import net.harimurti.joylive.JsonData.User;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -74,16 +74,16 @@ public class MainAdapter extends ArrayAdapter<User> {
             viewHolder.nickname.setText(user.nickname);
 
         viewHolder.status.setText(user.getAnnouncement());
-        viewHolder.viewer.setText(user.getViewerHumanReadable());
+        viewHolder.viewer.setText(user.getViewerSimple());
         viewHolder.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, PlayerActivity.class);
-                intent.putExtra(User.MID, user.mid);
+                intent.putExtra(User.ID, user.getId());
                 intent.putExtra(User.NICKNAME, user.nickname);
-                intent.putExtra(User.PROFILEPIC, user.headPic);
+                intent.putExtra(User.HEADPIC, user.headPic);
                 intent.putExtra(User.ANNOUNCEMENT, user.getAnnouncement());
-                intent.putExtra(User.LINKSTREAM, user.videoPlayUrl);
+                intent.putExtra(User.VIDEOPLAYURL, user.videoPlayUrl);
                 context.startActivity(intent);
             }
         });

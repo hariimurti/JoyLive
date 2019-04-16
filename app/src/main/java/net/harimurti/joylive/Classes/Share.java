@@ -3,7 +3,7 @@ package net.harimurti.joylive.Classes;
 import android.content.Context;
 import android.content.Intent;
 
-import net.harimurti.joylive.JsonClass.User;
+import net.harimurti.joylive.JsonData.User;
 
 import java.util.Locale;
 
@@ -17,7 +17,7 @@ public class Share {
     public void Link(User user) {
         String text = String.format(Locale.getDefault(),
                 "%s — %s\n\n▶ LiveShow » %s",
-                user.nickname, user.getAnnouncement(), user.getLinkPlaylist());
+                user.nickname, user.getAnnouncement(), user.getPlaylistUrl());
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, "JoyLive.tv Streaming");
